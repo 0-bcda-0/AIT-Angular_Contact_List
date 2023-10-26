@@ -1,0 +1,28 @@
+.flexc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+// mat-form-field {
+//     display: block;
+//     margin-bottom: 10px; /* Optional: Add some spacing between the fields */
+// }  
+
+::ng-deep .mat-vertical-stepper-content 
+{
+    visibility: visible !important;
+    height: 100% !important;
+}
+
+.m-10 {
+    margin: 10px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}

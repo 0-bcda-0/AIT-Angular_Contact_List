@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{ dialogTitle }}</h1>
+<div mat-dialog-content>
+    <p>{{ dialogMessage }}</p>
+</div>
+<div mat-dialog-actions class="flex f-center">
+    <button mat-button (click)="closeDialog()">Odustani</button>
+    <button mat-button color="warn" cdkFocusInitial (click)="dialogButtonClick()">
+        {{ dialogButtonText }}
+    </button>
+</div>

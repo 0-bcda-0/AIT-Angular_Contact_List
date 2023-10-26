@@ -1,0 +1,43 @@
+.title {
+    color: white;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.link {
+    margin-top: 10px;
+    text-decoration: underline;
+    color: lightgrey;
+    cursor: pointer;
+
+    &:hover {
+        color: red;
+    }
+}
+
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1024px) {
+    .w-20 {
+        width: 40%;
+    }
+
+    .w-85 {
+        width: 45%;
+    }
+}
+
+@media (max-width: 450px) {
+    .w-20 {
+        width: 80%;
+    }
+
+    .w-85 {
+        width: 85%;
+    }
+}

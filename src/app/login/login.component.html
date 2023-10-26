@@ -1,0 +1,48 @@
+<mat-card class="w-20 m-auto mt-15p" >
+    <mat-card-header class="m-auto">
+        <mat-card-title class="title">Imenik</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="flex f-center">
+            <mat-spinner *ngIf="isLoading"></mat-spinner>
+        </div>
+        <form class="flex f-center f-d-c" #f="ngForm" (ngSubmit)="onSubmit(f)" *ngIf="!isLoading">
+            <mat-form-field appearance="outline">
+                <mat-label>E-Mail</mat-label>
+                <input matInput
+                        type="text"
+                        ngModel
+                        name="email"
+                        required 
+                        #email="ngModel"
+                >
+            </mat-form-field>
+            <span class="errorMessage" *ngIf="isError && errorMessagePosition==1">{{ errorMessageHTML }}</span>
+            <span class="errorMessage" *ngIf="!email.valid && email.touched">Unesite ispravan e-mail</span>
+            <mat-form-field appearance="outline">
+                <mat-label>Zaporka</mat-label>
+                <input matInput
+                        type="password"
+                        ngModel
+                        name="password" 
+                        minlength="6"
+                        maxlength="6"
+                        required
+                        #password="ngModel"
+                >
+            </mat-form-field>
+            <span class="errorMessage" *ngIf="isError && errorMessagePosition==2">{{ errorMessageHTML }}</span>
+            <span class="errorMessage" *ngIf="!password.valid && password.touched">Unesite zaporku ispravnog formata</span>
+            <button mat-raised-button
+                    color="primary"
+                    type="submit"
+                    name="submit"
+                    [disabled]="!f.valid"    
+            >{{ isLoginMode ? 'Login' : 'Register' }}</button>
+        </form>
+        <div class="flex f-center"> 
+            <!-- TREBALO BI MJENJATI BOJU, ALI NE RADI -->
+            <a class="link" (click)="onSwitchMode()">{{ isLoginMode ? 'Registriraj' : 'Prijavi' }} se</a>
+        </div>
+    </mat-card-content>
+</mat-card>

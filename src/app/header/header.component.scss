@@ -1,0 +1,30 @@
+@import "/src/variables";
+
+.nav-list {
+    display: flex;
+    flex-direction: column;
+
+    a {
+        text-decoration: none;
+        margin: 1rem 0.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            color: #ccc;
+        }
+
+        &.active {
+            color: $primary-color;
+            border-bottom: 1px solid $primary-color;
+        }
+    }
+}
+
+.lastChild {
+    margin-left: auto;
+}

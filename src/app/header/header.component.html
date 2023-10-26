@@ -1,0 +1,27 @@
+<mat-toolbar>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="toggleMenu()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <span>Angular Imenik</span>
+    <span class="example-spacer"></span>
+    <app-theme-toggle class="lastChild"></app-theme-toggle>
+</mat-toolbar>
+
+<mat-sidenav-container class="h-100vh">
+    <mat-sidenav mode="side" [opened]="isMenuOpen">
+        <mat-nav-list class="nav-list">
+            <a routerLink="/header" routerLinkActive="active" class="nav-link">
+                <mat-icon>perm_identity</mat-icon>
+                Kontakti
+            </a>
+            <a (click)="logout()"  class="nav-link">
+                <mat-icon>logout</mat-icon>
+                Odjava
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <!-- CHILD ROUTER -->
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
