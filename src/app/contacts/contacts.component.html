@@ -1,6 +1,12 @@
 <mat-card class="w-85 m-auto mt-5p ">
-    <mat-card-header>
+    <mat-card-header class="flex">
         <mat-card-title>Kontakti</mat-card-title>
+        <form [formGroup]="filterForm" class="example-form" class="search-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Pretražite kontakte</mat-label>
+                <input matInput type="text" formControlName="search" (input)="applyFilter()">
+            </mat-form-field>
+        </form>
     </mat-card-header>
     <mat-card-content class="table-container">
         <table mat-table [dataSource]="dataSource" matSort>
@@ -76,7 +82,6 @@
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
         </table>
-
     </mat-card-content>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
     </mat-paginator>

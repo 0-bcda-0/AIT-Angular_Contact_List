@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { DialogService } from '../dialog.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,8 +12,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { Contact } from '../contact.interface';
+
+
+import { FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'app-contacts',
@@ -28,19 +33,31 @@ import { Contact } from '../contact.interface';
         MatPaginatorModule,
         MatSortModule,
         MatTooltipModule,
-        HttpClientModule,
+        MatFormFieldModule,
+        MatInputModule,
         MatSnackBarModule,
+
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
     ],
 })
 export class ContactsComponent implements AfterViewInit {
 
-    searchFormControl = new FormControl();
+    filterForm: FormGroup;
 
     myDataArray: Array<Contact> = [];
 
     constructor(private dialogSevice: DialogService,
         private http: HttpClient,
-        private _snackBar: MatSnackBar) {
+        private _snackBar: MatSnackBar,
+        private formBuilder: FormBuilder
+    ) {
+
+        //* Inicializacija sa praznim stringom
+        this.filterForm = this.formBuilder.group({
+            search: [''],
+        });
 
         //* Dohvacanje uid-a iz local storage-a
         const user = localStorage.getItem('userData');
@@ -167,7 +184,7 @@ export class ContactsComponent implements AfterViewInit {
     }
 
     applyFilter() {
-        const filterValue = this.searchFormControl.value;
+        const filterValue = this.filterForm.get('search')?.value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 }
