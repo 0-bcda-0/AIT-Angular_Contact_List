@@ -173,8 +173,7 @@ export class ContactsComponent implements AfterViewInit {
             }
         });
     }
-
-    //? Vise se ne koristi 
+    
     openDialog(): void {
         this.dialogSevice.openDialog();
     }
