@@ -19,7 +19,6 @@ export class ThemeToggleComponent implements OnInit {
     constructor(private renderer: Renderer2) { }
 
     ngOnInit(): void {
-        // console.log('theme on init in local:',localStorage.getItem('theme'));
         if (localStorage.getItem('theme') == 'light') {
             this.isDarkMode = true;
             this.renderer.addClass(document.body, 'alternative');
@@ -30,7 +29,7 @@ export class ThemeToggleComponent implements OnInit {
 
     }
 
-    toggleTheme() {
+    toggleTheme(): void {
         this.isDarkMode = !this.isDarkMode;
         if (this.isDarkMode) {
             this.renderer.addClass(document.body, 'alternative');

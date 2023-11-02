@@ -22,11 +22,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app/app-routing.module';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule, AppRoutingModule, FormsModule, MatButtonModule, MatInputModule, MatCardModule, MatSidenavModule, MatListModule, MatToolbarModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatStepperModule, MatNativeDateModule, MatDatepickerModule, MatSelectModule, MatFormFieldModule, ReactiveFormsModule),
+        importProvidersFrom(BrowserModule, AppRoutingModule, FormsModule, MatButtonModule, MatInputModule, MatCardModule, MatSidenavModule, MatListModule, MatToolbarModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatStepperModule, MatNativeDateModule, MatDatepickerModule, MatSelectModule, MatFormFieldModule, ReactiveFormsModule, HttpClientModule, MatSnackBarModule),
         provideAnimations()
     ]
 })

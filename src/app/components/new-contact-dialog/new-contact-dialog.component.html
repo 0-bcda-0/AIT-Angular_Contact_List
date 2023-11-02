@@ -11,7 +11,6 @@
                     required
                 >
             </mat-form-field>
-            <!-- <span class="errorMessage" *ngIf="!dataInForm.valid && dataInForm.name.touched">Please enter a valid email.</span> -->
             <mat-form-field  class="m-10" appearance="outline">
                 <mat-label>Prezime</mat-label>
                 <input matInput
@@ -22,7 +21,7 @@
             </mat-form-field>
             <mat-form-field  class="m-10" appearance="outline">
                 <mat-label>Datum rođenja</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate" date>
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -75,6 +74,6 @@
     </mat-vertical-stepper>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="closeNewContactDialog(null, ['Zatvori formu', 'Jeste li sigurni da želite zatvoriti formu za novi kontakt?', 'Zatvori'], 'close')">Zatvori</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isViewOnly && !isEditMode">Spremi kontakt</button>
+    <button mat-button (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid">Spremi kontakt</button>
 </mat-dialog-actions>

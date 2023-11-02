@@ -19,8 +19,8 @@ $dark-theme: mat.define-dark-theme((
 // Define a light theme
 $light-theme: mat.define-light-theme((
     color: (
-        primary: mat.define-palette(mat.$indigo-palette),
-        accent: mat.define-palette(mat.$pink-palette),
+        primary: mat.define-palette(mat.$pink-palette),
+        accent: mat.define-palette(mat.$blue-grey-palette),
     ),
 ));
 

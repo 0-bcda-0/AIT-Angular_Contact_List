@@ -1,5 +1,5 @@
-<mat-card class="w-20 m-auto mt-15p" >
-    <mat-card-header class="m-auto">
+<mat-card class="login-card" >
+    <mat-card-header [ngStyle]="{'margin' : '0 auto'}">
         <mat-card-title class="title">Imenik</mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -14,11 +14,12 @@
                         ngModel
                         name="email"
                         required 
+                        email
                         #email="ngModel"
                 >
             </mat-form-field>
             <span class="errorMessage" *ngIf="isError && errorMessagePosition==1">{{ errorMessageHTML }}</span>
-            <span class="errorMessage" *ngIf="!email.valid && email.touched">Unesite ispravan e-mail</span>
+            <span class="errorMessage" *ngIf="!email.valid && email.touched">Unesite e-mail ispravnog formata</span>
             <mat-form-field appearance="outline">
                 <mat-label>Zaporka</mat-label>
                 <input matInput
@@ -38,10 +39,9 @@
                     type="submit"
                     name="submit"
                     [disabled]="!f.valid"    
-            >{{ isLoginMode ? 'Login' : 'Register' }}</button>
+            >{{ isLoginMode ? 'Prijavi se' : 'Registriraj se' }}</button>
         </form>
         <div class="flex f-center"> 
-            <!-- TREBALO BI MJENJATI BOJU, ALI NE RADI -->
             <a class="link" (click)="onSwitchMode()">{{ isLoginMode ? 'Registriraj' : 'Prijavi' }} se</a>
         </div>
     </mat-card-content>

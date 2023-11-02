@@ -1,8 +1,9 @@
-import { Component, Inject, Renderer2 } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NgIf, NgStyle } from '@angular/common';
+import { lastValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -11,13 +12,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-
-
-import { Contact } from '../contact.interface';
-import { DialogService } from '../dialog.service';
+import { SnackbarService } from '../../services/snackbar.service';
+import { DateFormate } from 'src/app/shared/dateFormat.service';
+import { IContact } from '../../models/contact.interface';
+import { ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-new-contact-dialog',
@@ -36,9 +36,9 @@ import { DialogService } from '../dialog.service';
         MatSelectModule,
         MatOptionModule,
         MatButtonModule,
-        MatSnackBarModule,
         NgIf,
-        NgStyle
+        NgStyle,
+        MatDialogModule
     ],
 })
 export class NewContactDialogComponent {
@@ -48,18 +48,20 @@ export class NewContactDialogComponent {
 
     isViewOnly: boolean = false;
     isEditMode: boolean = false;
-    uniqueID: any;
-    dataInForm: any;
+    uniqueID: string = '';
+    dataInForm: IContact | null = null;
     maxDate: Date = new Date();
 
-    constructor(private _formBuilder: FormBuilder,
-        private _snackBar: MatSnackBar,
+    userIdToken: string = '';
+
+    constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+        private _formBuilder: FormBuilder,
         private http: HttpClient,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-        private router: Router,
-        public dialogRef: MatDialogRef<NewContactDialogComponent>,
-        private dialogSevice: DialogService,
-        private renderer: Renderer2
+        private dialogRef: MatDialogRef<NewContactDialogComponent>,
+        private snackbarService: SnackbarService,
+        private dateFormatService: DateFormate,
+        private dialog: MatDialog,
+        private router: Router
     ) {
 
         this.PIFormGroup = this._formBuilder.group({
@@ -78,7 +80,6 @@ export class NewContactDialogComponent {
             phoneNumber: [{ value: '', disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
         });
 
-        console.log(this.data);
         if (data) {
             //* ViewOnly/Edit contact
             // Auto filling the form
@@ -87,20 +88,23 @@ export class NewContactDialogComponent {
             if (data.edit) {
                 this.isEditMode = true;
             }
+
+            const formatedDate = this.dateFormatService.formatDate(data.dateOfBirth);
+
             this.PIFormGroup = this._formBuilder.group({
-                name: [{ value: this.dataInForm.name, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
-                surname: [{ value: this.dataInForm.surname, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
-                dateOfBirth: [{ value: this.dataInForm.dateOfBirth, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                name: [{ value: this.dataInForm!.name, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                surname: [{ value: this.dataInForm!.surname, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                dateOfBirth: [{ value: formatedDate, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
             });
 
             this.LIFormGroup = this._formBuilder.group({
-                street: [{ value: this.dataInForm.street, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
-                postalCode: [{ value: this.dataInForm.postalCode, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                street: [{ value: this.dataInForm!.street, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                postalCode: [{ value: this.dataInForm!.postalCode, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
             });
 
             this.CIFormGroup = this._formBuilder.group({
-                phonePrefix: [{ value: this.dataInForm.phonePrefix, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
-                phoneNumber: [{ value: this.dataInForm.phoneNumber, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                phonePrefix: [{ value: this.dataInForm!.phonePrefix, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
+                phoneNumber: [{ value: this.dataInForm!.phoneNumber, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
             });
         } else {
             //* New contact 
@@ -109,14 +113,14 @@ export class NewContactDialogComponent {
         }
     }
 
-    onSubmit() {
+    onSubmit(): void{
         if (!this.isEditMode) {
             //! First Save
             //* Generiranje random ID-a
-            const uniqueID = this.createUniqueID();
+            const uniqueID: string = this.createUniqueID();
 
             //* Sve form grupe u jedan objekt sa random ID-om 
-            const formValues = Object.assign({}, { uniqueID }, this.PIFormGroup.value, this.LIFormGroup.value, this.CIFormGroup.value);
+            const formValues: IContact = Object.assign({}, { uniqueID }, this.PIFormGroup.value, this.LIFormGroup.value, this.CIFormGroup.value);
 
             //* Dohvacanje usera iz local storage-a
             let user = localStorage.getItem('userData');
@@ -125,34 +129,34 @@ export class NewContactDialogComponent {
             if (user) {
                 //* Dohvacanje useruid-a
                 const userObj = JSON.parse(user);
-                const useruid = userObj.localId;
+                const useruid: string = userObj.localId;
+
+                this.userIdToken = userObj.idToken;
 
                 //* Kreiranje finalnog payloada
-                const dataSaved = Object.assign({}, { useruid }, formValues);
+                const dataSaved: IContact = Object.assign({}, { useruid }, formValues);
 
                 //* Kreiranje URL-a za spremanje podataka u bazu i spremanje podataka u bazu
-                const dataBaseURL = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts.json`;
+                const dataBaseURL: string = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts.json?auth=${this.userIdToken}`;
                 this.http.post(dataBaseURL, dataSaved)
-                    .subscribe(
-                        responseData => {
-                            this._snackBar.open('Data has been successfully posted to the database.', '', { duration: 2000 });
+                    .subscribe({
+                        next: () => {
                             this.closeDialog();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
+                            this.router.navigate(['/header'], { queryParams: { r: true, type: 'new' } });
                         },
-                        error => {
-                            this._snackBar.open('Error posting data to the database', '', { duration: 2000 });
+                        error: () => {
+                            this.snackbarService.show('Pogreška pri spremanju.', 'Zatvori', 'error');
                         }
-                    );
+                    });
+
             } else {
                 //* Korisnih nije autentificiran
-                this._snackBar.open('User is not authenticated.', '', { duration: 2000 });
+                this.snackbarService.show('Korisnik nije autentificiran.', 'Zatvori', 'error');
             }
         } else {
             //! Edit
             //* Dodavanje ID-a iz Firebase-a
-            const id = this.dataInForm.id;
+            const id = this.dataInForm!.id;
 
             //* Dohvacanje korisnika iz local storage-a
             const user = localStorage.getItem('userData');
@@ -161,7 +165,9 @@ export class NewContactDialogComponent {
             if (user) {
                 const userObj = JSON.parse(user);
 
-                const useruid = userObj.localId;
+                const useruid: string = userObj.localId;
+
+                this.userIdToken = userObj.idToken;
 
                 //* Kreiranje finalnog payloada
                 const formValues = Object.assign({}, { useruid }, this.PIFormGroup.value, this.LIFormGroup.value, this.CIFormGroup.value);
@@ -172,58 +178,69 @@ export class NewContactDialogComponent {
                 delete formValues.number;
 
                 //* kreiranje URL-a za spremanje podataka u bazu i azuriranje podataka
-                const dataBaseURL = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts/${id}.json`;
+                const dataBaseURL: string = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts/${id}.json?auth=${this.userIdToken}`;
                 this.http.put(dataBaseURL, formValues)
-                    .subscribe(
-                        responseData => {
-                            this._snackBar.open('Data has been successfully edited.', '', { duration: 2000 });
+                    .subscribe({
+                        next: () => {
                             this.closeDialog();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
+                            this.router.navigate(['/header'], { queryParams: { r: true, type: 'edit' } });
                         },
-                        error => {
-                            this._snackBar.open('Error editing data.', '', { duration: 2000 });
+                        error: (error) => {
+                            this.snackbarService.show('Pogreška pri uređivanju.', 'Zatvori', 'error');
                         }
-                    );
+                    });
+
             } else {
                 //* Korisnik nije autentificiran
-                this._snackBar.open('User is not authenticated.', '', { duration: 2000 });
+                this.snackbarService.show('Korisnik nije autentificiran.', 'Zatvori', 'error');
             }
         }
     }
 
-    createUniqueID() {
-        const timestamp = Date.now();
-        const randomString = Math.random().toString(36).substring(2, 5);
+    createUniqueID(): string {
+        const timestamp: number = Date.now();
+        const randomString: string = Math.random().toString(36).substring(2, 5);
 
-        let id = timestamp + randomString;
+        let id: string = timestamp + randomString;
 
         return id;
     };
 
-    closeDialog() {
+    closeDialog(): void {
         this.dialogRef.close();
     }
 
-    //* Potvrdni dialog 
-    closeNewContactDialog(data: null, text: {}, action: string) {
-        //* Prikazivanje iskljucivo ako je forma dirty
-        console.log('isEditMode', this.isEditMode);
-        console.log('isViewOnly', this.isViewOnly);
-        
-        const isFormDirty = this.PIFormGroup.dirty || this.LIFormGroup.dirty || this.CIFormGroup.dirty;
+    async openCloseDialogAsync(): Promise<void> {
+        const isFormDirty: boolean = this.PIFormGroup.dirty || this.LIFormGroup.dirty || this.CIFormGroup.dirty;
 
+        //* Prikazivanje forme iskljucivo ako je forma dirty
         if (isFormDirty && ((this.isEditMode && this.isViewOnly) || (!this.isEditMode && !this.isViewOnly))) {
-            this.dialogSevice.closeNewContactDialog(data, text, action);
+            const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+                width: '350px',
+                data: {
+                    title: 'Zatvaranje forme',
+                    message: 'Jeste li sigurni da želite zatvoriti formu za novi kontakt?',
+                    action: 'Zatvori'
+                },
+            });
+
+            try {
+                const result = await lastValueFrom(dialogRef.afterClosed());
+                if (result) {
+                    this.closeDialog();
+                }
+            } catch (error) {
+                console.error('Greška pri otvaranju dialoga: ', error);
+            }
         } else {
             this.closeDialog();
         }
     }
 
+
     //* Limitator 
-    limitInputToCharacters(event: any, limit: number) {
-        const inputValue = event.target.value;
+    limitInputToCharacters(event: any, limit: number): void {
+        const inputValue: string = event.target.value;
 
         if (inputValue.length > limit) {
             event.target.value = inputValue.slice(0, limit);

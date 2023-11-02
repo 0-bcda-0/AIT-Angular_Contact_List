@@ -1,0 +1,85 @@
+.card{
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 5%;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    border-color: currentColor;
+}
+
+.table-container {
+    overflow: auto;
+}
+
+th{
+    user-select: none;
+}
+
+.header-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-rightFlex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+// Angular Material dodaje column te se pojavljuje nepoznat element ispod
+.mat-mdc-form-field {
+    flex-direction: row;
+}
+
+@media (max-width: 1024px) {
+    .header-container {
+        flex-direction: row;
+    }
+
+    .header-rightFlex {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 450px) {
+    .card{
+        width: 100%;
+        margin-top: 0;
+    }
+
+    .header-container {
+        flex-direction: column;
+        justify-content: center;
+
+        width: 100%;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+    .header-rightFlex {
+        margin-top: 20px;
+        flex-direction: column-reverse;
+
+        width: 100%;
+    }
+
+    .table-container{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    // Iskreno meni se ne svida jer izgleda kao line break ili section break (dodano zbog app reviewa)
+    .btn-small-fullWidth {
+        width: 90%;
+    }
+}

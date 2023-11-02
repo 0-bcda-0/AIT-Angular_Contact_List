@@ -11,33 +11,32 @@
     cursor: pointer;
 
     &:hover {
-        color: red;
+        color: #e04338;
     }
 }
 
+.login-card{
+    width: 20%;
+    margin: 0 auto;
+    margin-top: 15%;
+}
+
 .errorMessage {
-    color: red;
+    color: #e04338;
     font-size: 12px;
     margin-top: -10px;
     margin-bottom: 10px;
 }
 
 @media (max-width: 1024px) {
-    .w-20 {
+    .login-card {
         width: 40%;
-    }
-
-    .w-85 {
-        width: 45%;
     }
 }
 
 @media (max-width: 450px) {
-    .w-20 {
+    .login-card {
         width: 80%;
-    }
-
-    .w-85 {
-        width: 85%;
+        margin-top: 60%;
     }
 }

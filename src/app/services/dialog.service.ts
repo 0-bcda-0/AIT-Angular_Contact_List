@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NewContactDialogComponent } from './new-contact-dialog/new-contact-dialog.component';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { Contact } from './contact.interface';
+import { NewContactDialogComponent } from '../components/new-contact-dialog/new-contact-dialog.component'
 
 
 @Injectable({ providedIn: 'root' })
@@ -26,15 +24,4 @@ export class DialogService {
         });
     }
 
-    deleteContactDialog(data: Contact, text: {}, action: string): void {
-        this.dialog.open(ConfirmDialogComponent, {
-            data: { data, text, action }
-        });
-    }
-
-    closeNewContactDialog(data: null, text: {}, action: string): void {
-        this.dialog.open(ConfirmDialogComponent, {
-            data: { data, text, action }
-        });
-    }
 }

@@ -12,6 +12,7 @@
 
 ::ng-deep .mat-vertical-stepper-content 
 {
+    // Mora ici !important jer inace Angular to overrida
     visibility: visible !important;
     height: 100% !important;
 }
