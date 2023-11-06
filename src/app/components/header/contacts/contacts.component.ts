@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { lastValueFrom, take } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { NgIf, NgStyle } from '@angular/common';
 
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -90,7 +90,6 @@ export class ContactsComponent implements AfterViewInit {
 
             this.userIdToken = userObj.idToken;
 
-
             //* Dohvacanje podataka iz baze sa istim useruid-om
             const dataBaseURL: string = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts.json?auth=${this.userIdToken}`;
             this.http.get(dataBaseURL).subscribe((data: any) => {
@@ -116,6 +115,7 @@ export class ContactsComponent implements AfterViewInit {
                     this.dataSource = new MatTableDataSource(this.myDataArray);
 
                     this.isLoading = false;
+
                 } else {
                     //* Ako nema podataka u bazi, isprazni array
                     this.myDataArray = [];

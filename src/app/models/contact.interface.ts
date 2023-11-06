@@ -8,5 +8,4 @@ export interface IContact {
     postalCode: number;
     phonePrefix: number;
     phoneNumber: number;
-    uniqueID?: string;
 }

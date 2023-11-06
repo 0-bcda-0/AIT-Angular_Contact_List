@@ -48,7 +48,6 @@ export class NewContactDialogComponent {
 
     isViewOnly: boolean = false;
     isEditMode: boolean = false;
-    uniqueID: string = '';
     dataInForm: IContact | null = null;
     maxDate: Date = new Date();
 
@@ -116,11 +115,9 @@ export class NewContactDialogComponent {
     onSubmit(): void{
         if (!this.isEditMode) {
             //! First Save
-            //* Generiranje random ID-a
-            const uniqueID: string = this.createUniqueID();
 
             //* Sve form grupe u jedan objekt sa random ID-om 
-            const formValues: IContact = Object.assign({}, { uniqueID }, this.PIFormGroup.value, this.LIFormGroup.value, this.CIFormGroup.value);
+            const formValues: IContact = Object.assign({}, this.PIFormGroup.value, this.LIFormGroup.value, this.CIFormGroup.value);
 
             //* Dohvacanje usera iz local storage-a
             let user = localStorage.getItem('userData');
@@ -196,15 +193,6 @@ export class NewContactDialogComponent {
             }
         }
     }
-
-    createUniqueID(): string {
-        const timestamp: number = Date.now();
-        const randomString: string = Math.random().toString(36).substring(2, 5);
-
-        let id: string = timestamp + randomString;
-
-        return id;
-    };
 
     closeDialog(): void {
         this.dialogRef.close();
