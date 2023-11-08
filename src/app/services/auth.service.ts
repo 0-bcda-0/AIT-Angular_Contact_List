@@ -1,26 +1,28 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { tap } from 'rxjs/operators';
 
 import { IAuthResponseData } from '../models/IAuthResponseData.interface';
 
+import { environment } from 'src/environments/environment.firebase';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    
-    constructor(private http: HttpClient) { }
+
+    http = inject(HttpClient);
 
     user = new BehaviorSubject<User>(null!);
 
     signup(email: string, password: string) {
         return this.http
             .post<IAuthResponseData>(
-                'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBQ0Se7T3dFJse5Xo3NfOxWojtHLNyKGCo',
+                environment.firebaseConfig.authURL + environment.firebaseConfig.signUp + environment.firebaseConfig.apiKey,
                 {
                     email: email,
                     password: password,
-                    returnSecureToken: true 
+                    returnSecureToken: true
                 }
             )
             .pipe(tap(resData => {
@@ -37,7 +39,7 @@ export class AuthService {
     login(email: string, password: string) {
         return this.http
             .post<IAuthResponseData>(
-                'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBQ0Se7T3dFJse5Xo3NfOxWojtHLNyKGCo',
+                environment.firebaseConfig.authURL + environment.firebaseConfig.signIn + environment.firebaseConfig.apiKey,
                 {
                     email: email,
                     password: password,

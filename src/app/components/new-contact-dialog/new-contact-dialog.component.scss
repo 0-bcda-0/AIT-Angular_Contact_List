@@ -9,16 +9,14 @@
 //     display: block;
 //     margin-bottom: 10px; /* Optional: Add some spacing between the fields */
 // }  
-
-::ng-deep .mat-vertical-stepper-content 
-{
+::ng-deep .mat-vertical-stepper-content {
     // Mora ici !important jer inace Angular to overrida
     visibility: visible !important;
     height: 100% !important;
 }
 
 .m-10 {
-    margin: 10px;
+    margin: 10px 0;
 }
 
 .errorMessage {
@@ -26,4 +24,58 @@
     font-size: 12px;
     margin-top: -10px;
     margin-bottom: 10px;
+}
+
+.dialogContent {
+    width: 900px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 20px;
+    width: 100%;
+}
+
+@media (max-width: 450px) {
+    mat-form-field {
+        width: 100%;
+    }
+
+    .dialogContent {
+        width: 100%;
+    }
+
+    .input-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+// Scrollbar
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #e91e63 #424242;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #424242;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #e91e63;
+    border-radius: 20px;
+    border: 3px solid #424242;
 }

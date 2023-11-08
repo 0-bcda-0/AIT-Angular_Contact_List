@@ -1,4 +1,4 @@
-.card{
+.card {
     width: 85%;
     margin: 0 auto;
     margin-top: 5%;
@@ -18,17 +18,18 @@
     overflow: auto;
 }
 
-th{
+th {
     user-select: none;
 }
 
-.header-container{
+.header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
 }
 
-.header-rightFlex{
+.header-rightFlex {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,6 +39,11 @@ th{
 // Angular Material dodaje column te se pojavljuje nepoznat element ispod
 .mat-mdc-form-field {
     flex-direction: row;
+}
+
+.dim {
+    background-color: rgba($color: #000000, $alpha: 0.2);
+    pointer-events: none;
 }
 
 @media (max-width: 1024px) {
@@ -51,35 +57,30 @@ th{
 }
 
 @media (max-width: 450px) {
-    .card{
+    .card {
         width: 100%;
         margin-top: 0;
     }
 
     .header-container {
         flex-direction: column;
-        justify-content: center;
-
+        justify-content: flex-start;
+        align-items: flex-start;
         width: 100%;
         margin: 0;
-        padding: 10px 0;
+        padding: 10px 10px;
     }
 
     .header-rightFlex {
         margin-top: 20px;
         flex-direction: column-reverse;
-
+        align-items: flex-start;
         width: 100%;
     }
 
-    .table-container{
+    .table-container {
         width: 100%;
         margin: 0;
         padding: 0;
-    }
-
-    // Iskreno meni se ne svida jer izgleda kao line break ili section break (dodano zbog app reviewa)
-    .btn-small-fullWidth {
-        width: 90%;
     }
 }

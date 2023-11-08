@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NewContactDialogComponent } from '../components/new-contact-dialog/new-contact-dialog.component'
 
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
-    constructor(private dialog: MatDialog) { }
+    dialog = inject(MatDialog);
 
     openDialog(): void {
         this.dialog.open(NewContactDialogComponent);

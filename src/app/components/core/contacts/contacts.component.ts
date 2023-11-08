@@ -1,10 +1,13 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+// Angular
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
+// Angular Material
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,13 +20,13 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+// My Imports
 import { ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { IContact } from '../../../models/contact.interface';
 import { DateFormate } from 'src/app/shared/dateFormat.service';
 import { DialogService } from '../../../services/dialog.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { environment } from 'src/environments/environment.firebase';
+import { MySnackbarService } from 'src/app/services/my-snackbar.service';
 
 @Component({
     selector: 'app-contacts',
@@ -42,45 +45,46 @@ import { ActivatedRoute, Router } from '@angular/router';
         MatInputModule,
         MatDialogModule,
         MatProgressSpinnerModule,
-
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
         NgStyle,
-        NgIf
+        NgIf,
+        NgClass
     ],
 })
 export class ContactsComponent implements AfterViewInit {
+    dialogSevice = inject(DialogService);
+    http = inject(HttpClient);
+    formBuilder = inject(FormBuilder);
+    dateFormatService = inject(DateFormate);
+    dialog = inject(MatDialog);
+    MySnackbarService = inject(MySnackbarService);
+    route = inject(ActivatedRoute);
+    router = inject(Router);
 
-    filterForm: FormGroup;
-
-    myDataArray: Array<IContact> = [];
-
+    filterForm!: FormGroup;
+    myDataArray: IContact[] = [];
     isLoading: boolean = true;
-
     userIdToken: string = '';
 
-    constructor(private dialogSevice: DialogService,
-        private http: HttpClient,
-        private formBuilder: FormBuilder,
-        private dateFormatService: DateFormate,
-        public dialog: MatDialog,
-        private snackbarService: SnackbarService,
-        private route: ActivatedRoute,
-        private router: Router,
-    ) {
+    //* Za Angular Material Table
+    dataSource = new MatTableDataSource(this.myDataArray);
+    columnsToDisplay: string[] = ['id', 'name', 'surname', 'dateOfBirth', 'street', 'postalCode', 'phonePrefix', 'phoneNumber', 'actions'];
 
-        //* Inicializacija sa praznim stringom
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
+
+    constructor() {
         this.filterForm = this.formBuilder.group({
             search: [''],
         });
-
         this.getData();
     }
 
     getData(): void {
         //* Dohvacanje uid-a iz local storage-a
-        const user: string | null= localStorage.getItem('userData');
+        const user: string | null = localStorage.getItem('userData');
 
         //* Provjera da li je user autentificiran
         if (user) {
@@ -91,12 +95,12 @@ export class ContactsComponent implements AfterViewInit {
             this.userIdToken = userObj.idToken;
 
             //* Dohvacanje podataka iz baze sa istim useruid-om
-            const dataBaseURL: string = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts.json?auth=${this.userIdToken}`;
+            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json?auth=${this.userIdToken}`;
             this.http.get(dataBaseURL).subscribe((data: any) => {
                 if (data !== null) {
                     //* Dohvacanje ID-a iz Firebase-a, spremanje u array
                     // const contacts: any = Object.values(data);
-                    const contacts: Array<IContact> = Object.keys(data).map(id => ({ id, ...data[id] }));
+                    const contacts: IContact[] = Object.keys(data).map(id => ({ id, ...data[id] }));
 
                     //* Filtracija podataka po useruid-u
                     this.myDataArray = contacts.filter((contact: any) => contact.useruid === useruid);
@@ -124,40 +128,33 @@ export class ContactsComponent implements AfterViewInit {
             );
         } else {
             //* Korisnik nije autentificiran 
-            this.snackbarService.show('Korisnik nije autentificiran', 'Zatvorite', 'error');
+            this.MySnackbarService.openSnackBar('Korisnik nije autentificiran', 'Zatvorite', 'error');
         }
     }
 
-    refreshData(type: string): void{
+    refreshData(type: string): void {
         this.getData();
         this.displaySnackbar(type);
     }
 
     displaySnackbar(type: string): void {
         if (type === 'new') {
-            this.snackbarService.show('Uspješno spremanje kontakta', 'Zatvori', 'success');
+            this.MySnackbarService.openSnackBar('Uspješno spremanje kontakta', 'Zatvori', 'success');
         } else if (type === 'edit') {
-            this.snackbarService.show('Uspješno uređivanje kontakta', 'Zatvori', 'success');
+            this.MySnackbarService.openSnackBar('Uspješno uređivanje kontakta', 'Zatvori', 'success');
         } else if (type === 'delete') {
-            this.snackbarService.show('Uspješno brisanje kontakta', 'Zatvori', 'success');
+            this.MySnackbarService.openSnackBar('Uspješno brisanje kontakta', 'Zatvori', 'success');
         }
     }
 
-    //* Za Angular Material Table
-    dataSource = new MatTableDataSource(this.myDataArray);
-    columnsToDisplay: Array<string> = ['id', 'name', 'surname', 'dateOfBirth', 'street', 'postalCode', 'phonePrefix', 'phoneNumber', 'actions'];
-
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
-
-    ngAfterViewInit(): void{
+    ngAfterViewInit(): void {
         //* Ako u URL imamo r=true, onda refreshamo podatke i micemo parametre, ako ne onda samo standardno prikazujemo podatke
         this.route.queryParams.subscribe(params => {
             if (params['r'] === 'true') {
                 //* Dohvacanje podataka isto kao i u constructoru sa dodatnim snackbarom
                 this.refreshData(params['type']);
                 //* Micemo parametre
-                this.router.navigate(['/header'], { queryParams: {} }).then(() => {
+                this.router.navigate(['/core'], { queryParams: {} }).then(() => {
                     setTimeout(() => {
                         this.dataSource.paginator = this.paginator;
                         this.dataSource.sort = this.sort;
@@ -169,11 +166,11 @@ export class ContactsComponent implements AfterViewInit {
                         this.dataSource.paginator = this.paginator;
                         this.dataSource.sort = this.sort;
                     }
-                    , 1000);
+                , 1000);
             }
         });
     }
-    
+
     openDialog(): void {
         this.dialogSevice.openDialog();
     }
@@ -194,7 +191,6 @@ export class ContactsComponent implements AfterViewInit {
     }
 
     async openDeleteDialogAsync(element: IContact): Promise<void> {
-
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '350px',
             data: {
@@ -210,21 +206,20 @@ export class ContactsComponent implements AfterViewInit {
                 this.asyncDeleteContact(element);
             }
         } catch (error) {
-            this.snackbarService.show('Greška pri otvaranju dialoga', 'Zatvori', 'error');
+            this.MySnackbarService.openSnackBar('Greška pri otvaranju dialoga', 'Zatvori', 'error');
         }
     }
 
     async asyncDeleteContact(element: IContact): Promise<void> {
         try {
             const id: string = element.id!;
-
-            const dataBaseURL: string = `https://ng-course-3f5f5-default-rtdb.firebaseio.com/contacts/${id}.json?auth=${this.userIdToken}`;
+            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json?auth=${this.userIdToken}`;
             await lastValueFrom(this.http.delete(dataBaseURL));
-            this.snackbarService.show('Data has been successfully deleted from the database.', 'Zatvori', 'success');
-            this.router.navigate(['/header'], { queryParams: { r: true, type: 'delete' } });
+            this.MySnackbarService.openSnackBar('Data has been successfully deleted from the database.', 'Zatvori', 'success');
+            this.router.navigate(['/core'], { queryParams: { r: true, type: 'delete' } });
         }
         catch (error) {
-            this.snackbarService.show('Greška pri brisanju kontakta', 'Zatvori', 'error');
+            this.MySnackbarService.openSnackBar('Greška pri brisanju kontakta', 'Zatvori', 'error');
         }
     }
 }

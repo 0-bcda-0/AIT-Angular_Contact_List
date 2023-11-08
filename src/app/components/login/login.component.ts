@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+// Angular
+import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIf, NgStyle } from '@angular/common';
 import { Observable } from 'rxjs';
 
+// Angular Material
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+// My Imports
 import { AuthService } from '../../services/auth.service';
 import { IAuthResponseData } from '../../models/IAuthResponseData.interface';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { MySnackbarService } from 'src/app/services/my-snackbar.service';
 
 @Component({
     selector: 'app-login',
@@ -29,10 +32,14 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
         HttpClientModule,
         MatProgressSpinnerModule,
         NgIf,
-        NgStyle
+        NgStyle,
     ]
 })
 export class LoginComponent {
+    router = inject(Router);
+    authService = inject(AuthService);
+    MySnackbarService = inject(MySnackbarService);
+
     isLoginMode: boolean = true;
     isLoading: boolean = false;
 
@@ -40,10 +47,6 @@ export class LoginComponent {
     errorMessageHTML: string = '';
     errorMessagePosition: number = 0;
     error: string | null = null;
-
-    constructor(private router: Router,
-                private authService: AuthService,
-                private snackbarService: SnackbarService) { }
 
     onSubmit(form: NgForm): void {
         if (!form.valid) {
@@ -69,7 +72,7 @@ export class LoginComponent {
             next: (resData: IAuthResponseData) => {
                 this.isLoading = false;
                 localStorage.setItem('userData', JSON.stringify(resData));
-                this.router.navigate(['/header']);
+                this.router.navigate(['/core']);
             },
             error: (error) => {
                 this.error = error.error.error.message;
@@ -77,7 +80,6 @@ export class LoginComponent {
                 this.isLoading = false;
             }
         });
-
         form.reset();
     }
 
@@ -111,10 +113,7 @@ export class LoginComponent {
                 message = 'Greška';
                 break;
         }
-
         this.errorMessageHTML = message;
-
-        this.snackbarService.show(message, 'Zatvori', 'error');
-
+        this.MySnackbarService.openSnackBar(message, 'Zatvori', 'error');
     }
 }

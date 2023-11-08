@@ -1,79 +1,97 @@
 <h2 mat-dialog-title>Unesi novi kontakt</h2>
-<mat-dialog-content>
+<mat-dialog-content class="dialogContent">
+    <!-- <mat-dialog-content> -->
     <mat-vertical-stepper>
         <mat-step label="Osobni podaci" [completed]="isViewOnly">
-        <form [formGroup]="PIFormGroup">
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Ime</mat-label>
-                <input matInput
-                    type="text"
-                    formControlName="name"
-                    required
-                >
-            </mat-form-field>
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Prezime</mat-label>
-                <input matInput
-                        type="text"
-                        formControlName="surname"
-                        required
-                >
-            </mat-form-field>
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Datum rođenja</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate" date>
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-        </form>
+            <form [formGroup]="PIFormGroup">
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Ime</mat-label>
+                            <input matInput type="text" formControlName="name" required>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="name?.touched && !name?.valid">Unesite ime ispravnog
+                            formata</mat-error>
+                    </div>
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Prezime</mat-label>
+                            <input matInput type="text" formControlName="surname" required>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="surname?.touched && !surname?.valid">Unesite prezime
+                            ispravnog formata</mat-error>
+                    </div>
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Datum rođenja</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate" date>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="dateOfBirth?.touched && !dateOfBirth?.valid">Unesite
+                            datum ispravnog formata</mat-error>
+                    </div>
+                </div>
+            </form>
         </mat-step>
         <mat-step label="Informacije o lokaciji" [completed]="isViewOnly">
-        <form [formGroup]="LIFormGroup">
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Ulica</mat-label>
-                <input matInput
-                        type="text"
-                        formControlName="street"
-                        required
-                >
-            </mat-form-field>
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Poštanski broj</mat-label>
-                <input matInput
-                        type="number"
-                        formControlName="postalCode"
-                        (input)="limitInputToCharacters($event, 5)"
-                        required
-                >
-            </mat-form-field>
-        </form>
+            <form [formGroup]="LIFormGroup">
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Ulica</mat-label>
+                            <input matInput type="text" formControlName="street" required>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="street?.touched && !street?.valid">Unesite ulicu
+                            ispravnog formata</mat-error>
+                    </div>
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Poštanski broj</mat-label>
+                            <input matInput type="number" formControlName="postalCode"
+                                (input)="limitInputToCharacters($event, 5)" required>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="postalCode?.touched && !postalCode?.valid">Unesite
+                            poštanski
+                            broj ispravnog formata</mat-error>
+                    </div>
+                </div>
+            </form>
         </mat-step>
-        <mat-step label="Kontakt Informacije"  [completed]="isViewOnly">
-        <form [formGroup]="CIFormGroup">
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Predbroj telefona</mat-label>
-                    <mat-select formControlName="phonePrefix">
-                        <mat-option value="091">091</mat-option>
-                        <mat-option value="098">098</mat-option>
-                        <mat-option value="099">099</mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field  class="m-10" appearance="outline">
-                <mat-label>Broj telefona</mat-label>
-                <input matInput
-                        type="number"
-                        formControlName="phoneNumber"
-                        (input)="limitInputToCharacters($event, 7)"
-                        required
-                >
-            </mat-form-field>
-        </form>
+        <mat-step label="Kontakt Informacije" [completed]="isViewOnly">
+            <form [formGroup]="CIFormGroup">
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Predbroj telefona</mat-label>
+                            <mat-select formControlName="phonePrefix">
+                                <mat-option value="091">091</mat-option>
+                                <mat-option value="098">098</mat-option>
+                                <mat-option value="099">099</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="phonePrefix?.touched && !phonePrefix?.valid">Unesite
+                            predbroj
+                            telefona</mat-error>
+                    </div>
+                    <div class="input-container">
+                        <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Broj telefona</mat-label>
+                            <input matInput type="number" formControlName="phoneNumber"
+                                (input)="limitInputToCharacters($event, 7)" required>
+                        </mat-form-field>
+                        <mat-error class="errorMessage" *ngIf="phoneNumber?.touched && !phoneNumber?.valid">Unesite broj
+                            telefona ispravnog formata</mat-error>
+                    </div>
+                </div>
+            </form>
         </mat-step>
     </mat-vertical-stepper>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid">Spremi kontakt</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()"
+        [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid"
+        *ngIf="!isViewOnly || isEditMode">Spremi kontakt</button>
 </mat-dialog-actions>

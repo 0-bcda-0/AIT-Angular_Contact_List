@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class DateFormate {
     formatDate(date: string): string {
         //* Provjera dal je date u formatu YYYY-MM-DDT00:00:00.000Z

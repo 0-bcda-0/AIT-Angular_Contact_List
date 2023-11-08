@@ -1,26 +1,28 @@
-import { Component } from '@angular/core';
+// Angular
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NgStyle } from '@angular/common';
 
+// Angualr Material
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+// My Imports
 import { ThemeToggleComponent } from '../../theme-toggle/theme-toggle.component';
-import { NgStyle } from '@angular/common';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
+    selector: 'app-core',
+    templateUrl: './core.component.html',
+    styleUrls: ['./core.component.scss'],
     standalone: true,
     imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, RouterLinkActive, RouterOutlet, ThemeToggleComponent, NgStyle]
 })
-export class HeaderComponent {
+export class CoreComponent {
     isMenuOpen = false;
-
-    constructor(private router: Router) { }
+    router = inject(Router);
 
     toggleMenu() {
         this.isMenuOpen = !this.isMenuOpen;

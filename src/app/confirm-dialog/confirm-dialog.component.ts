@@ -14,5 +14,6 @@ import { MatButtonModule } from '@angular/material/button';
     ],
 })
 export class ConfirmDialogComponent {
-    constructor(@Inject(MAT_DIALOG_DATA) public data: {message: string; title: string; action: string}){}
+    constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string; title: string; action: string }) { }
+
 }

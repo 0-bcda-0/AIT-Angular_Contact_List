@@ -9,11 +9,11 @@
 <mat-sidenav-container [ngStyle]="{'height' : 'calc(100vh - 64px)'}">
     <mat-sidenav mode="side" [opened]="isMenuOpen">
         <mat-nav-list class="nav-list">
-            <a routerLink="/header" routerLinkActive="active" class="nav-link">
+            <a routerLink="/core" routerLinkActive="active" class="nav-link">
                 <mat-icon class="nav-icon">perm_identity</mat-icon>
                 Kontakti
             </a>
-            <a (click)="logout()"  class="nav-link">
+            <a (click)="logout()" class="nav-link">
                 <mat-icon class="nav-icon">logout</mat-icon>
                 Odjava
             </a>

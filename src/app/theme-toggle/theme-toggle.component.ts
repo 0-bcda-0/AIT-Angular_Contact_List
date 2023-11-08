@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -16,7 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 export class ThemeToggleComponent implements OnInit {
     isDarkMode!: boolean;
 
-    constructor(private renderer: Renderer2) { }
+    renderer = inject(Renderer2);
 
     ngOnInit(): void {
         if (localStorage.getItem('theme') == 'light') {

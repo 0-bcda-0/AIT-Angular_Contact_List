@@ -1,9 +1,10 @@
-<mat-card class="card">
+<mat-card class="card" [ngClass]="isLoading ? 'dim' : ''">
     <mat-card-header class="header-container">
         <mat-card-title>Kontakti</mat-card-title>
         <div class="header-rightFlex">
-            <button mat-raised-button color="primary" (click)="openDialog()" class="btn-small-fullWidth">Unesi kontakt</button>
-            <form [formGroup]="filterForm"  class="search-bar">
+            <button mat-raised-button color="primary" (click)="openDialog()" class="btn-small-fullWidth">Unesi
+                kontakt</button>
+            <form [formGroup]="filterForm" class="search-bar">
                 <mat-form-field appearance="outline">
                     <mat-label>Pretražite kontakte</mat-label>
                     <input matInput type="text" formControlName="search" (input)="applyFilter()">
@@ -17,17 +18,20 @@
         </div>
         <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}" *ngIf="!isLoading">
             <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Rbr.</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Rbr.
+                </th>
                 <td mat-cell *matCellDef="let element"> {{element.number }} </td>
             </ng-container>
 
             <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Ime </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Ime
+                </th>
                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
             </ng-container>
 
             <ng-container matColumnDef="surname">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po prezimenu"> Prezime
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po prezimenu">
+                    Prezime
                 </th>
                 <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
             </ng-container>
@@ -45,23 +49,25 @@
             </ng-container>
 
             <ng-container matColumnDef="postalCode">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po poštanskom broju"> Poštanski
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    sortActionDescription="Sortiraj po poštanskom broju"> Poštanski
                     broj</th>
                 <td mat-cell *matCellDef="let element"> {{element.postalCode}} </td>
             </ng-container>
 
             <ng-container matColumnDef="phonePrefix">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po predbroju"> Predbroj
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po predbroju">
+                    Predbroj
                 </th>
                 <td mat-cell *matCellDef="let element"> {{element.phonePrefix}} </td>
             </ng-container>
 
             <ng-container matColumnDef="phoneNumber">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po broju telefona"> Broj
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    sortActionDescription="Sortiraj po broju telefona"> Broj
                     telefona</th>
                 <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
             </ng-container>
-
 
             <ng-container matColumnDef="actions" stickyEnd>
                 <th mat-header-cell *matHeaderCellDef> Akcije </th>
@@ -74,10 +80,6 @@
                         (click)="editContactDialog(element)">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <!-- <button mat-icon-button color="warn" matTooltip="Brisanje kontakta"
-                        (click)="deleteContactDialog(element, ['Brisanje forme', 'Jeste li sigurni da želite izbrisati kontakt?', 'Obriši'], 'delete')">
-                        <mat-icon>delete</mat-icon>
-                    </button> -->
                     <button mat-icon-button color="warn" matTooltip="Brisanje kontakta"
                         (click)="openDeleteDialogAsync(element)">
                         <mat-icon>delete</mat-icon>
