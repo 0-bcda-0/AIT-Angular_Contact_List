@@ -55,7 +55,6 @@ export class AuthService {
                 );
             }
             ));
-
     }
 
     private handleAuthentication(
@@ -71,6 +70,7 @@ export class AuthService {
             token,
             expirationDate
         );
+        localStorage.setItem('token', token);
         this.user.next(user);
     }
 }

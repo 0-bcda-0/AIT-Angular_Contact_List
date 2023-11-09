@@ -30,6 +30,7 @@ export class CoreComponent {
 
     logout() {
         localStorage.removeItem('userData');
+        localStorage.removeItem('token');
         this.router.navigate(['/login']);
     }
 }
