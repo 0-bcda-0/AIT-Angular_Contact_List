@@ -8,8 +8,13 @@
 
 <mat-sidenav-container [ngStyle]="{'height' : 'calc(100vh - 64px)'}">
     <mat-sidenav mode="side" [opened]="isMenuOpen">
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; gap: 10px;">
+            <div>Korisnik,</div>
+            <a routerLink="/core/user-settings" routerLinkActive="active" class="userSettingsLink">{{ currentUser!.name + ' ' + currentUser!.surname }}</a>
+        </div>
+        <hr>
         <mat-nav-list class="nav-list">
-            <a routerLink="/core" routerLinkActive="active" class="nav-link">
+            <a routerLink="/core" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
                 <mat-icon class="nav-icon">perm_identity</mat-icon>
                 Kontakti
             </a>

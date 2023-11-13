@@ -25,6 +25,9 @@ import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
 
 bootstrapApplication(AppComponent, {
     providers: [

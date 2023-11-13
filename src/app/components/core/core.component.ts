@@ -1,5 +1,5 @@
 // Angular
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgStyle } from '@angular/common';
 
@@ -12,6 +12,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 // My Imports
 import { ThemeToggleComponent } from '../../theme-toggle/theme-toggle.component';
+import { User } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-core',
@@ -20,9 +22,17 @@ import { ThemeToggleComponent } from '../../theme-toggle/theme-toggle.component'
     standalone: true,
     imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, RouterLinkActive, RouterOutlet, ThemeToggleComponent, NgStyle]
 })
-export class CoreComponent {
+export class CoreComponent implements OnInit {
     isMenuOpen = false;
+
     router = inject(Router);
+    authService = inject(AuthService);
+
+    currentUser: User | null = null;
+
+    ngOnInit(): void {
+        this.currentUser = JSON.parse(localStorage.getItem('userData')!);
+    }
 
     toggleMenu() {
         this.isMenuOpen = !this.isMenuOpen;
@@ -30,7 +40,7 @@ export class CoreComponent {
 
     logout() {
         localStorage.removeItem('userData');
-        localStorage.removeItem('token');
         this.router.navigate(['/login']);
     }
 }
+

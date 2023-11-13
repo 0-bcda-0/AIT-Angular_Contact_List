@@ -13,7 +13,7 @@ class AuthGuard {
         route: ActivatedRouteSnapshot,
         router: RouterStateSnapshot
     ): boolean | UrlTree | Promise<boolean> | Observable<boolean | UrlTree> {
-        if(localStorage.getItem('token')) {
+        if(localStorage.getItem('userData')) {
             return true;
         }
         return this.authService.user.pipe(

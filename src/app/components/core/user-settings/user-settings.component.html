@@ -1,0 +1,36 @@
+<mat-card class="main-card">
+    <mat-card-header class="header-container">
+        <mat-card-title>Korisnički centar, {{ currentUser?.name + ' ' + currentUser?.surname }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="main-card-container">
+        <mat-card class="child-card">
+            <mat-card-header class="header-container">
+                <mat-card-title>Promjena korisničkih podataka</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+                    <div class="input-container">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ime</mat-label>
+                            <input matInput type="text" ngModel name="name" required #name="ngModel" [(ngModel)]="currentUser.name">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Prezime</mat-label>
+                            <input matInput type="text" ngModel name="surname" required #surname="ngModel" [(ngModel)]="currentUser.surname">
+                        </mat-form-field>
+                    </div>
+                    <button mat-raised-button color="primary" type="submit" name="submit" [disabled]="!f.touched">Promjeni</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="child-card">
+            <mat-card-header class="header-container">
+                <mat-card-title>Zahtjev za promjenu zaporke</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="text">Poslati ćemo zahtjev za promjenu zaporke na {{ currentUser?.email }}</div>
+                <button mat-raised-button color="primary" (click)="sendPRM()">Pošalji zahtjev</button>
+            </mat-card-content>
+        </mat-card>
+    </mat-card-content>
+</mat-card>

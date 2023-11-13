@@ -14,6 +14,7 @@ $primary-color: #c72a68;
         align-items: center;
         justify-content: center;
         gap: 10px;
+        color: #fff;
 
         &:hover {
             color: #ccc;
@@ -33,4 +34,22 @@ $primary-color: #c72a68;
 .nav-icon {
     width: 20px;
     height: 20px;
+}
+
+.userSettingsLink{
+    font-weight:500;
+    text-decoration: none;
+    color: #fff;
+    // Mozda janky i mozda se ne smije medutim stavljeno iz razloga sto pri hoveru i activu ostatak komponenti se pomice gore dolje jer se tek tada pojavljuje border
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+        color: #ccc;
+        border-bottom: 1px solid #fff;
+    }
+
+    &.active {
+        color: $primary-color;
+        border-bottom: 1px solid $primary-color;
+    }
 }
