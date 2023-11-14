@@ -12,11 +12,12 @@
                     <div class="input-container">
                         <mat-form-field appearance="outline">
                             <mat-label>Ime</mat-label>
-                            <input matInput type="text" ngModel name="name" required #name="ngModel" [(ngModel)]="currentUser.name">
+                            <input matInput type="text" ngModel name="name" required #name="ngModel">
+                            <!-- <input matInput type="text" ngModel name="name" required #name="ngModel" [(ngModel)]="currentUser.name"> -->
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                             <mat-label>Prezime</mat-label>
-                            <input matInput type="text" ngModel name="surname" required #surname="ngModel" [(ngModel)]="currentUser.surname">
+                            <input matInput type="text" ngModel name="surname" required #surname="ngModel">
                         </mat-form-field>
                     </div>
                     <button mat-raised-button color="primary" type="submit" name="submit" [disabled]="!f.touched">Promjeni</button>

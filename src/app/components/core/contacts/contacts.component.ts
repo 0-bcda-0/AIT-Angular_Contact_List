@@ -99,7 +99,6 @@ export class ContactsComponent implements AfterViewInit {
             this.http.get(dataBaseURL).subscribe((data: any) => {
                 if (data !== null) {
                     //* Dohvacanje ID-a iz Firebase-a, spremanje u array
-                    // const contacts: any = Object.values(data);
                     const contacts: IContact[] = Object.keys(data).map(id => ({ id, ...data[id] }));
 
                     //* Filtracija podataka po useruid-u
@@ -119,6 +118,8 @@ export class ContactsComponent implements AfterViewInit {
                     this.dataSource = new MatTableDataSource(this.myDataArray);
 
                     this.isLoading = false;
+
+                    // console.log(this.myDataArray);
 
                 } else {
                     //* Ako nema podataka u bazi, isprazni array

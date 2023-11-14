@@ -14,6 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ThemeToggleComponent } from '../../theme-toggle/theme-toggle.component';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 
 @Component({
     selector: 'app-core',
@@ -27,11 +28,14 @@ export class CoreComponent implements OnInit {
 
     router = inject(Router);
     authService = inject(AuthService);
+    userSettingsService = inject(UserSettingsService);
 
     currentUser: User | null = null;
 
     ngOnInit(): void {
-        this.currentUser = JSON.parse(localStorage.getItem('userData')!);
+        this.userSettingsService.user.subscribe(user => {
+            this.currentUser = user;
+        });
     }
 
     toggleMenu() {

@@ -10,7 +10,7 @@
     <mat-sidenav mode="side" [opened]="isMenuOpen">
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; gap: 10px;">
             <div>Korisnik,</div>
-            <a routerLink="/core/user-settings" routerLinkActive="active" class="userSettingsLink">{{ currentUser!.name + ' ' + currentUser!.surname }}</a>
+            <a routerLink="/core/user-settings" routerLinkActive="active" class="userSettingsLink">{{ currentUser?.name + ' ' + currentUser?.surname }}</a>
         </div>
         <hr>
         <mat-nav-list class="nav-list">

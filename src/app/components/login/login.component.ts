@@ -76,8 +76,6 @@ export class LoginComponent {
         authObs.subscribe({
             next: (resData: IAuthResponseData) => {
                 this.isLoading = false;
-                localStorage.setItem('userData', JSON.stringify(resData));
-                this.authService.findUsername(resData);
                 this.router.navigate(['/core']);
             },
             error: (error) => {
@@ -134,12 +132,12 @@ export class LoginComponent {
         };
 
         this.http.post(url, requestBody).subscribe({
-            next: (data: any) => {
+            next: (data) => {
                 if (data !== null) {
                     this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');
                 }
             },
-            error: (error: any) => {
+            error: (error) => {
                 this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
             }
         });
