@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { tap } from 'rxjs/operators';
@@ -10,10 +10,12 @@ import { environment } from 'src/environments/environment.firebase';
 import { UserSettingsService } from './user-settings.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService implements OnDestroy {
 
     http = inject(HttpClient);
     userSettingsService = inject(UserSettingsService);
+
+    subscription: any;
 
     user = new BehaviorSubject<User>(null!);
 
@@ -29,7 +31,7 @@ export class AuthService {
             )
             .pipe(tap(resData => {
                 // Kreiranje jedinstvenog imena i prezimena
-                let userSettingsData: { name: string, surname: string} = this.userSettingsService.createUniqueUS();
+                let userSettingsData: { name: string, surname: string } = this.userSettingsService.createUniqueUS();
                 let name: string = userSettingsData.name;
                 let surname: string = userSettingsData.surname;
 
@@ -61,11 +63,12 @@ export class AuthService {
                 let name: string = '.';
                 let surname: string = '.';
                 // Dohvacanje imena i prezimena iz baze i spremanje u LS
-                this.userSettingsService.getUSfromDatabase(resData).subscribe({
+                this.subscription = this.userSettingsService.getUSfromDatabase(resData).subscribe({
                     next: (userSettingsData) => {
                         name = userSettingsData.name;
                         surname = userSettingsData.surname;
                         this.userSettingsService.storeUSinLocalStorage(resData, name, surname);
+                        this.userSettingsService.refreshUser();
                     },
                     error: (err) => {
                         console.log('Error: ' + err);
@@ -98,5 +101,9 @@ export class AuthService {
             expirationDate,
         );
         this.user.next(user);
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 }

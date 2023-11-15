@@ -147,7 +147,7 @@ export class NewContactDialogComponent {
                 const dataSaved: IContact = Object.assign({}, { useruid }, formValues);
 
                 //* Kreiranje URL-a za spremanje podataka u bazu i spremanje podataka u bazu
-                const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json?auth=${this.userIdToken}`;
+                const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json`;
                 this.http.post(dataBaseURL, dataSaved)
                     .subscribe({
                         next: () => {
@@ -183,7 +183,7 @@ export class NewContactDialogComponent {
                 delete formValues.number;
 
                 //* kreiranje URL-a za spremanje podataka u bazu i azuriranje podataka
-                const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json?auth=${this.userIdToken}`;
+                const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json`;
                 this.http.put(dataBaseURL, formValues)
                     .subscribe({
                         next: () => {

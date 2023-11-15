@@ -6,4 +6,6 @@ export interface IAuthResponseData {
     expiresIn: string;
     localId: string;
     registered?: boolean;
+    name?: string;
+    surname?: string;
 }

@@ -1,6 +1,6 @@
 <mat-card class="main-card">
     <mat-card-header class="header-container">
-        <mat-card-title>Korisnički centar, {{ currentUser?.name + ' ' + currentUser?.surname }}</mat-card-title>
+        <mat-card-title>Korisnički centar, {{ currentUser.name + ' ' + currentUser.surname }}</mat-card-title>
     </mat-card-header>
     <mat-card-content class="main-card-container">
         <mat-card class="child-card">
@@ -29,7 +29,7 @@
                 <mat-card-title>Zahtjev za promjenu zaporke</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <div class="text">Poslati ćemo zahtjev za promjenu zaporke na {{ currentUser?.email }}</div>
+                <div class="text">Poslati ćemo zahtjev za promjenu zaporke na {{ currentUser.email }}</div>
                 <button mat-raised-button color="primary" (click)="sendPRM()">Pošalji zahtjev</button>
             </mat-card-content>
         </mat-card>

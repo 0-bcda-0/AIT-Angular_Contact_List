@@ -1,11 +1,12 @@
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { IAuthResponseData } from 'src/app/models/IAuthResponseData.interface';
 import { User } from 'src/app/models/user.model';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -26,16 +27,20 @@ import { environment } from 'src/environments/environment.firebase';
     MatButtonModule,
   ]
 })
-export class UserSettingsComponent implements OnInit {
+export class UserSettingsComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   http = inject(HttpClient);
   MySnackbarService = inject(MySnackbarService);
   userSettingsService = inject(UserSettingsService);
 
-  currentUser: User | null = null;
+  currentUser!: IAuthResponseData;
+
+  subscription: any;
 
   ngOnInit(): void {
-    this.userSettingsService.user.subscribe(user => {
+    this.subscription = this.userSettingsService.user.subscribe(user => {
+      console.log("user");
+      console.log(user);
       this.currentUser = user;
     });
   }
@@ -70,6 +75,10 @@ export class UserSettingsComponent implements OnInit {
         this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }

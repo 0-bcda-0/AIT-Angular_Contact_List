@@ -51,7 +51,7 @@ import { MySnackbarService } from 'src/app/services/my-snackbar.service';
         NgStyle,
         NgIf,
         NgClass
-    ],
+    ]
 })
 export class ContactsComponent implements AfterViewInit {
     dialogSevice = inject(DialogService);
@@ -95,7 +95,7 @@ export class ContactsComponent implements AfterViewInit {
             this.userIdToken = userObj.idToken;
 
             //* Dohvacanje podataka iz baze sa istim useruid-om
-            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json?auth=${this.userIdToken}`;
+            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json`;
             this.http.get(dataBaseURL).subscribe((data: any) => {
                 if (data !== null) {
                     //* Dohvacanje ID-a iz Firebase-a, spremanje u array
@@ -167,7 +167,7 @@ export class ContactsComponent implements AfterViewInit {
                         this.dataSource.paginator = this.paginator;
                         this.dataSource.sort = this.sort;
                     }
-                , 1000);
+                    , 1000);
             }
         });
     }
@@ -214,13 +214,17 @@ export class ContactsComponent implements AfterViewInit {
     async asyncDeleteContact(element: IContact): Promise<void> {
         try {
             const id: string = element.id!;
-            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json?auth=${this.userIdToken}`;
+            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json`;
             await lastValueFrom(this.http.delete(dataBaseURL));
-            this.MySnackbarService.openSnackBar('Data has been successfully deleted from the database.', 'Zatvori', 'success');
+            this.MySnackbarService.openSnackBar(
+                'Data has been successfully deleted from the database.',
+                'Zatvori',
+                'success'
+            );
             this.router.navigate(['/core'], { queryParams: { r: true, type: 'delete' } });
-        }
-        catch (error) {
+        } catch (error) {
             this.MySnackbarService.openSnackBar('Greška pri brisanju kontakta', 'Zatvori', 'error');
         }
     }
+
 }
