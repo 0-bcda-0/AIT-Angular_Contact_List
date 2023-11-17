@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,7 @@ import { environment } from 'src/environments/environment.firebase';
     MatButtonModule,
   ]
 })
-export class UserSettingsComponent implements OnInit, OnDestroy {
+export class UserSettingsComponent implements OnInit {
   authService = inject(AuthService);
   http = inject(HttpClient);
   MySnackbarService = inject(MySnackbarService);
@@ -40,12 +40,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   subscription: any;
 
   ngOnInit(): void {
-    this.subscription = this.userSettingsService.user.subscribe(user => {
-      this.currentUser = user;
-    });
-
-    this.nameToDisplay = this.currentUser.name;
-    this.surnameToDisplay = this.currentUser.surname;
+    this.currentUser = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null;
+      this.nameToDisplay = this.currentUser.name;
+      this.surnameToDisplay = this.currentUser.surname;
   }
 
   async onSubmitAsync(form: NgForm): Promise<void> {
@@ -59,6 +56,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
       await this.userSettingsService.updateUSinDatabaseAsync(this.currentUser, name, surname);
       this.userSettingsService.storeUSinLocalStorage(this.currentUser, name, surname);
       this.MySnackbarService.openSnackBar('Korisnički podaci uspješno promjenjeni.', 'Zatvori', 'success');
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch {
       this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom promjene korisničkih podataka', 'Zatvori', 'error');
     }
@@ -80,10 +80,6 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     } catch {
       this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
     }
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
 }

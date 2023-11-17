@@ -1,5 +1,5 @@
 // Angular
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgStyle } from '@angular/common';
 
@@ -23,7 +23,7 @@ import { UserSettingsService } from 'src/app/services/user-settings.service';
     standalone: true,
     imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, RouterLinkActive, RouterOutlet, ThemeToggleComponent, NgStyle]
 })
-export class CoreComponent implements OnInit, OnDestroy {
+export class CoreComponent implements OnInit {
     router = inject(Router);
     authService = inject(AuthService);
     userSettingsService = inject(UserSettingsService);
@@ -33,9 +33,7 @@ export class CoreComponent implements OnInit, OnDestroy {
     isMenuOpen: boolean = false;
 
     ngOnInit(): void {
-        this.subscription = this.userSettingsService.user.subscribe(user => {
-            this.currentUser = user;
-        });
+        this.currentUser = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null;
     }
 
     toggleMenu(): void {
@@ -44,12 +42,7 @@ export class CoreComponent implements OnInit, OnDestroy {
 
     logout(): void {
         localStorage.removeItem('userData');
-        this.subscription.unsubscribe();
         this.router.navigate(['/login']);
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
     }
 }
 
