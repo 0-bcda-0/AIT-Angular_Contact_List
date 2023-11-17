@@ -69,17 +69,18 @@ th {
         justify-content: flex-start;
         align-items: flex-start;
         margin: 0;
+        padding: 0;
     }
 
     .header-rightFlex {
         margin-top: 20px;
         flex-direction: column-reverse;
         align-items: flex-start;
-        width: 100%;
+        // width: 100%;
     }
 
     .table-container {
-        width: 100%;
+        // width: 100%;
         margin: 0;
         padding: 0;
     }
