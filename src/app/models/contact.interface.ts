@@ -8,4 +8,5 @@ export interface IContact {
     postalCode: number;
     phonePrefix: number;
     phoneNumber: number;
+    useruid?: string;
 }

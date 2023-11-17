@@ -45,7 +45,7 @@
             <a class="link" (click)="onSwitchMode()">{{ isLoginMode ? 'Registriraj' : 'Prijavi' }} se</a>
         </div>
         <div class="flex f-center"> 
-            <a class="link" *ngIf="isPasswordResetVisible" (click)="sendPRMwM(emailForPasswordReset)" style="text-align: center;">Pošalji zahtjev za reset lozinke na<br>{{emailForPasswordReset}}</a>
+            <a class="link" *ngIf="isPasswordResetVisible" (click)="sendPRMwMAsync(emailForPasswordReset)" style="text-align: center;">Pošalji zahtjev za reset lozinke na<br>{{emailForPasswordReset}}</a>
         </div>
     </mat-card-content>
 </mat-card>

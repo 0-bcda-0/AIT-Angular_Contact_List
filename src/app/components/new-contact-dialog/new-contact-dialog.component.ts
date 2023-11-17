@@ -46,8 +46,6 @@ import { MySnackbarService } from 'src/app/services/my-snackbar.service';
     ],
 })
 export class NewContactDialogComponent {
-    //! AKO KORISTIM OVAJ NACIN ONDA MI SE STRGA VIEW ONLY I EDIT MODE 
-    // @Inject(MAT_DIALOG_DATA) data: any;
     _formBuilder = inject(FormBuilder);
     http = inject(HttpClient);
     dialogRef = inject(MatDialogRef);
@@ -67,17 +65,7 @@ export class NewContactDialogComponent {
 
     userIdToken: string = '';
 
-    // constructor() {
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: any,
-        // private _formBuilder: FormBuilder,
-        // private http: HttpClient,
-        // private dialogRef: MatDialogRef<NewContactDialogComponent>,
-        // private MySnackbarService: MySnackbarService,
-        // private dateFormatService: DateFormate,
-        // private dialog: MatDialog,
-        // private router: Router
-    ) {
+    constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
         this.PIFormGroup = this._formBuilder.group({
             name: [{ value: '', disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
             surname: [{ value: '', disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
@@ -103,7 +91,7 @@ export class NewContactDialogComponent {
                 this.isEditMode = true;
             }
 
-            const formatedDate = this.dateFormatService.formatDate(this.data.dateOfBirth);
+            const formatedDate: string = this.dateFormatService.formatDate(this.data.dateOfBirth);
 
             this.PIFormGroup = this._formBuilder.group({
                 name: [{ value: this.dataInForm!.name, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
@@ -127,12 +115,11 @@ export class NewContactDialogComponent {
         }
     }
 
-    onSubmit(): void {
+    async onSubmitAsync(): Promise<void> {
         let user = localStorage.getItem('userData');
 
         if (!this.isEditMode) {
             //! First Save
-
             //* Sve form grupe u jedan objekt sa random ID-om 
             const formValues: IContact = Object.assign({}, this.PIFormGroup.value, this.LIFormGroup.value, this.CIFormGroup.value);
 
@@ -148,17 +135,14 @@ export class NewContactDialogComponent {
 
                 //* Kreiranje URL-a za spremanje podataka u bazu i spremanje podataka u bazu
                 const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json`;
-                this.http.post(dataBaseURL, dataSaved)
-                    .subscribe({
-                        next: () => {
-                            this.closeDialog();
-                            this.router.navigate(['/core'], { queryParams: { r: true, type: 'new' } });
-                        },
-                        error: () => {
-                            this.MySnackbarService.openSnackBar('Pogreška pri spremanju.', 'Zatvori', 'error');
-                        }
-                    });
+                try {
+                    const http = await lastValueFrom(this.http.post(dataBaseURL, dataSaved));
 
+                    this.closeDialog();
+                    this.router.navigate(['/core'], { queryParams: { r: true, type: 'new' } });
+                } catch {
+                    this.MySnackbarService.openSnackBar('Pogreška pri spremanju.', 'Zatvori', 'error');
+                }
             } else {
                 //* Korisnih nije autentificiran
                 this.MySnackbarService.openSnackBar('Korisnik nije autentificiran.', 'Zatvori', 'info');
@@ -184,16 +168,14 @@ export class NewContactDialogComponent {
 
                 //* kreiranje URL-a za spremanje podataka u bazu i azuriranje podataka
                 const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json`;
-                this.http.put(dataBaseURL, formValues)
-                    .subscribe({
-                        next: () => {
-                            this.closeDialog();
-                            this.router.navigate(['/core'], { queryParams: { r: true, type: 'edit' } });
-                        },
-                        error: (error) => {
-                            this.MySnackbarService.openSnackBar('Pogreška pri uređivanju.', 'Zatvori', 'error');
-                        }
-                    });
+                try {
+                    const http = await lastValueFrom(this.http.put(dataBaseURL, formValues));
+
+                    this.closeDialog();
+                    this.router.navigate(['/core'], { queryParams: { r: true, type: 'edit' } });
+                } catch {
+                    this.MySnackbarService.openSnackBar('Pogreška pri uređivanju.', 'Zatvori', 'error');
+                }
             } else {
                 //* Korisnik nije autentificiran
                 this.MySnackbarService.openSnackBar('Korisnik nije autentificiran.', 'Zatvori', 'info');
@@ -221,6 +203,7 @@ export class NewContactDialogComponent {
 
             try {
                 const result = await lastValueFrom(dialogRef.afterClosed());
+
                 if (result) {
                     this.closeDialog();
                 }
@@ -231,7 +214,6 @@ export class NewContactDialogComponent {
             this.closeDialog();
         }
     }
-
 
     //* Limitator 
     limitInputToCharacters(event: any, limit: number): void {

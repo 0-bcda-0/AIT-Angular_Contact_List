@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgIf, NgStyle } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 
 // Angular Material
 import { MatButtonModule } from '@angular/material/button';
@@ -53,7 +53,7 @@ export class LoginComponent {
     isPasswordResetVisible: boolean = false;
     emailForPasswordReset: string = '';
 
-    onSubmit(form: NgForm): void {
+    async onSubmit(form: NgForm): Promise<void> {
         if (!form.valid) {
             return;
         }
@@ -63,29 +63,31 @@ export class LoginComponent {
 
         this.isLoading = true;
 
-        let authObs: Observable<IAuthResponseData>;
+        let authObs: Observable<IAuthResponseData> | void;
 
         if (this.isLoginMode) {
             //* LOGIN
-            authObs = this.authService.login(email, password);
-        } else {
-            //* SIGNUP
-            authObs = this.authService.signup(email, password);
-        }
-
-        authObs.subscribe({
-            next: (resData: IAuthResponseData) => {
+            try {
+                authObs = await this.authService.loginAsync(email, password);
                 this.isLoading = false;
                 this.router.navigate(['/core']);
-            },
-            error: (error) => {
+            } catch (error: any) {
                 this.error = error.error.error.message;
                 this.errorHandling(this.error);
                 this.isLoading = false;
                 this.isPasswordResetVisible = true;
                 this.emailForPasswordReset = email;
             }
-        });
+        } else {
+            //* SIGNUP
+            try {
+                authObs = await this.authService.signupAsync(email, password);
+                this.isLoading = false;
+                this.router.navigate(['/core']);
+            } catch {
+                this.MySnackbarService.openSnackBar('Greška u registraciji', 'Zatvori', 'error');
+            }
+        }
         form.reset();
     }
 
@@ -123,24 +125,21 @@ export class LoginComponent {
         this.MySnackbarService.openSnackBar(message, 'Zatvori', 'error');
     }
 
-    sendPRMwM(email: string): void {
-        const url = environment.firebaseConfig.passResetURL + environment.firebaseConfig.apiKey;
+    async sendPRMwMAsync(email: string): Promise<void> {
+        try {
+            const url: string = environment.firebaseConfig.passResetURL + environment.firebaseConfig.apiKey;
 
-        const requestBody = {
-            email: email,
-            requestType: 'PASSWORD_RESET'
-        };
+            const requestBody = {
+                email: email,
+                requestType: 'PASSWORD_RESET'
+            };
 
-        this.http.post(url, requestBody).subscribe({
-            next: (data) => {
-                if (data !== null) {
-                    this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');
-                }
-            },
-            error: (error) => {
-                this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
+            const data = await lastValueFrom(this.http.post(url, requestBody));
+            if (data !== null) {
+                this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');
             }
-        });
-
+        } catch {
+            this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
@@ -6,8 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { lastValueFrom } from 'rxjs';
 import { IAuthResponseData } from 'src/app/models/IAuthResponseData.interface';
-import { User } from 'src/app/models/user.model';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { MySnackbarService } from 'src/app/services/my-snackbar.service';
@@ -34,47 +34,52 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   userSettingsService = inject(UserSettingsService);
 
   currentUser!: IAuthResponseData;
+  nameToDisplay: string | undefined;
+  surnameToDisplay: string | undefined;
 
   subscription: any;
 
   ngOnInit(): void {
     this.subscription = this.userSettingsService.user.subscribe(user => {
-      console.log("user");
-      console.log(user);
       this.currentUser = user;
     });
+
+    this.nameToDisplay = this.currentUser.name;
+    this.surnameToDisplay = this.currentUser.surname;
   }
 
-  onSubmit(form: NgForm): void {
+  async onSubmitAsync(form: NgForm): Promise<void> {
     if (!form.valid) {
       return;
     }
 
     const name: string = form.value.name;
     const surname: string = form.value.surname;
-
-    this.userSettingsService.updateUSinDatabase(this.currentUser, name, surname);
-    this.userSettingsService.storeUSinLocalStorage(this.currentUser, name, surname);
+    try {
+      await this.userSettingsService.updateUSinDatabaseAsync(this.currentUser, name, surname);
+      this.userSettingsService.storeUSinLocalStorage(this.currentUser, name, surname);
+      this.MySnackbarService.openSnackBar('Korisnički podaci uspješno promjenjeni.', 'Zatvori', 'success');
+    } catch {
+      this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom promjene korisničkih podataka', 'Zatvori', 'error');
+    }
   }
 
-  sendPRM(): void {
-    const url: string = environment.firebaseConfig.passResetURL + environment.firebaseConfig.apiKey;
+  async sendPRMAsync(): Promise<void> {
+    try {
+      const url: string = environment.firebaseConfig.passResetURL + environment.firebaseConfig.apiKey;
 
-    const requestBody = {
-      email: this.currentUser!.email,
-      requestType: 'PASSWORD_RESET'
-    };
+      const requestBody = {
+        email: this.currentUser!.email,
+        requestType: 'PASSWORD_RESET'
+      };
 
-    this.http.post(url, requestBody).subscribe({
-      next: (data) => {
-        if (data !== null) {
-          this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke poslan uspješno.', 'Zatvori', 'success');
-        }
-      },
-      error: (error) => {
-        this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
+      const data = await lastValueFrom(this.http.post(url, requestBody));
+      if (data !== null) {
+        this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke poslan uspješno.', 'Zatvori', 'success');
       }
-    });
+    } catch {
+      this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
+    }
   }
 
   ngOnDestroy(): void {

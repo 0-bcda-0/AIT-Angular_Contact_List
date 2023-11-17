@@ -1,5 +1,5 @@
 // Angular
-import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -53,7 +53,7 @@ import { MySnackbarService } from 'src/app/services/my-snackbar.service';
         NgClass
     ]
 })
-export class ContactsComponent implements AfterViewInit {
+export class ContactsComponent implements AfterViewInit, OnInit {
     dialogSevice = inject(DialogService);
     http = inject(HttpClient);
     formBuilder = inject(FormBuilder);
@@ -75,66 +75,55 @@ export class ContactsComponent implements AfterViewInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
-    constructor() {
+    ngOnInit() {
         this.filterForm = this.formBuilder.group({
             search: [''],
         });
-        this.getData();
+        this.getDataAsync();
     }
 
-    getData(): void {
-        //* Dohvacanje uid-a iz local storage-a
+    async getDataAsync(): Promise<void> {
         const user: string | null = localStorage.getItem('userData');
 
-        //* Provjera da li je user autentificiran
         if (user) {
-            //* Dohvacanje useruid-a
             const userObj = JSON.parse(user);
             const useruid: string = userObj.localId;
-
             this.userIdToken = userObj.idToken;
-
-            //* Dohvacanje podataka iz baze sa istim useruid-om
             const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json`;
-            this.http.get(dataBaseURL).subscribe((data: any) => {
-                if (data !== null) {
-                    //* Dohvacanje ID-a iz Firebase-a, spremanje u array
-                    const contacts: IContact[] = Object.keys(data).map(id => ({ id, ...data[id] }));
 
-                    //* Filtracija podataka po useruid-u
-                    this.myDataArray = contacts.filter((contact: any) => contact.useruid === useruid);
+            const data: any = await lastValueFrom(this.http.get(dataBaseURL));
 
-                    //* Dodavanje broja (1, 2, 3, ...) zbog prikaza u tablici
-                    this.myDataArray.forEach((contact: IContact, index: number) => {
-                        contact.number = (index + 1).toString();
-                    });
+            if (data !== null) {
+                //* Dohvacanje ID-a iz Firebase-a, spremanje u array
+                const contacts: IContact[] = Object.keys(data).map(id => ({ id, ...data[id] }));
 
-                    //* Formatiranje datuma
-                    this.myDataArray.forEach((contact: IContact) => {
-                        contact.dateOfBirth = this.dateFormatService.formatDate(contact.dateOfBirth);
-                    });
+                //* Filtracija podataka po useruid-u
+                this.myDataArray = contacts.filter((contact: IContact) => contact.useruid === useruid);
 
-                    //* Za Angular Material Table
-                    this.dataSource = new MatTableDataSource(this.myDataArray);
+                //* Dodavanje broja (1, 2, 3, ...) zbog prikaza u tablici
+                this.myDataArray.forEach((contact: IContact, index: number) => {
+                    contact.number = (index + 1).toString();
+                });
 
-                    this.isLoading = false;
+                //* Formatiranje datuma
+                this.myDataArray.forEach((contact: IContact) => {
+                    contact.dateOfBirth = this.dateFormatService.formatDate(contact.dateOfBirth);
+                });
 
-                    // console.log(this.myDataArray);
+                //* Za Angular Material Table
+                this.dataSource = new MatTableDataSource(this.myDataArray);
 
-                } else {
-                    //* Ako nema podataka u bazi, isprazni array
-                    this.myDataArray = [];
-                }
+                this.isLoading = false;
+            } else {
+                this.myDataArray = [];
             }
-            );
         } else {
-            //* Korisnik nije autentificiran 
             this.MySnackbarService.openSnackBar('Korisnik nije autentificiran', 'Zatvorite', 'error');
         }
     }
 
-    refreshData(type: string): void {
-        this.getData();
+    async refreshDataAsync(type: string): Promise<void> {
+        await this.getDataAsync();
         this.displaySnackbar(type);
     }
 
@@ -153,7 +142,7 @@ export class ContactsComponent implements AfterViewInit {
         this.route.queryParams.subscribe(params => {
             if (params['r'] === 'true') {
                 //* Dohvacanje podataka isto kao i u constructoru sa dodatnim snackbarom
-                this.refreshData(params['type']);
+                this.refreshDataAsync(params['type']);
                 //* Micemo parametre
                 this.router.navigate(['/core'], { queryParams: {} }).then(() => {
                     setTimeout(() => {
@@ -194,33 +183,27 @@ export class ContactsComponent implements AfterViewInit {
     async openDeleteDialogAsync(element: IContact): Promise<void> {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '350px',
-            data: {
-                title: 'Brisanje forme',
-                message: 'Jeste li sigurni da želite izbrisati kontakt?',
-                action: 'Obriši'
-            },
+            data: { title: 'Brisanje forme', message: 'Jeste li sigurni da želite izbrisati kontakt?', action: 'Obriši' },
         });
 
         try {
             const result = await lastValueFrom(dialogRef.afterClosed());
             if (result) {
-                this.asyncDeleteContact(element);
+                this.DeleteContactAsync(element);
             }
         } catch (error) {
             this.MySnackbarService.openSnackBar('Greška pri otvaranju dialoga', 'Zatvori', 'error');
         }
     }
 
-    async asyncDeleteContact(element: IContact): Promise<void> {
+    async DeleteContactAsync(element: IContact): Promise<void> {
         try {
             const id: string = element.id!;
             const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json`;
+
             await lastValueFrom(this.http.delete(dataBaseURL));
-            this.MySnackbarService.openSnackBar(
-                'Data has been successfully deleted from the database.',
-                'Zatvori',
-                'success'
-            );
+
+            this.MySnackbarService.openSnackBar('Data has been successfully deleted from the database.', 'Zatvori', 'success');
             this.router.navigate(['/core'], { queryParams: { r: true, type: 'delete' } });
         } catch (error) {
             this.MySnackbarService.openSnackBar('Greška pri brisanju kontakta', 'Zatvori', 'error');

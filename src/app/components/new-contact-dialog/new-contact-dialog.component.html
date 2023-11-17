@@ -91,7 +91,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()"
+    <button mat-raised-button color="primary" (click)="onSubmitAsync()"
         [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid"
         *ngIf="!isViewOnly || isEditMode">Spremi kontakt</button>
 </mat-dialog-actions>

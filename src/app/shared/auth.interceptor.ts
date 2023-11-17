@@ -11,15 +11,12 @@ import { Observable } from 'rxjs';
 export class AuthInterceptor implements HttpInterceptor {
     userIdToken: string | null = null;
 
-    constructor() {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const user = localStorage.getItem('userData');
         const userObj = JSON.parse(user!);
         if (user) {
             this.userIdToken = userObj.idToken;
         }
-    }
-
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (this.userIdToken) {
             const modifiedRequest = req.clone({
                 params: req.params.set('auth', this.userIdToken),

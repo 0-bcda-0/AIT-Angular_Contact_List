@@ -8,16 +8,15 @@
                 <mat-card-title>Promjena korisničkih podataka</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+                <form #f="ngForm" (ngSubmit)="onSubmitAsync(f)">
                     <div class="input-container">
                         <mat-form-field appearance="outline">
                             <mat-label>Ime</mat-label>
-                            <input matInput type="text" ngModel name="name" required #name="ngModel">
-                            <!-- <input matInput type="text" ngModel name="name" required #name="ngModel" [(ngModel)]="currentUser.name"> -->
+                            <input matInput type="text" ngModel name="name" required #name="ngModel" [(ngModel)]="nameToDisplay">
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                             <mat-label>Prezime</mat-label>
-                            <input matInput type="text" ngModel name="surname" required #surname="ngModel">
+                            <input matInput type="text" ngModel name="surname" required #surname="ngModel" [(ngModel)]="surnameToDisplay">
                         </mat-form-field>
                     </div>
                     <button mat-raised-button color="primary" type="submit" name="submit" [disabled]="!f.touched">Promjeni</button>
@@ -30,7 +29,7 @@
             </mat-card-header>
             <mat-card-content>
                 <div class="text">Poslati ćemo zahtjev za promjenu zaporke na {{ currentUser.email }}</div>
-                <button mat-raised-button color="primary" (click)="sendPRM()">Pošalji zahtjev</button>
+                <button mat-raised-button color="primary" (click)="sendPRMAsync()">Pošalji zahtjev</button>
             </mat-card-content>
         </mat-card>
     </mat-card-content>

@@ -24,15 +24,13 @@ import { UserSettingsService } from 'src/app/services/user-settings.service';
     imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, RouterLinkActive, RouterOutlet, ThemeToggleComponent, NgStyle]
 })
 export class CoreComponent implements OnInit, OnDestroy {
-    isMenuOpen = false;
-
     router = inject(Router);
     authService = inject(AuthService);
     userSettingsService = inject(UserSettingsService);
 
     subscription: any;
-
     currentUser: User | null = null;
+    isMenuOpen: boolean = false;
 
     ngOnInit(): void {
         this.subscription = this.userSettingsService.user.subscribe(user => {
@@ -40,11 +38,11 @@ export class CoreComponent implements OnInit, OnDestroy {
         });
     }
 
-    toggleMenu() {
+    toggleMenu(): void {
         this.isMenuOpen = !this.isMenuOpen;
     }
 
-    logout() {
+    logout(): void {
         localStorage.removeItem('userData');
         this.subscription.unsubscribe();
         this.router.navigate(['/login']);

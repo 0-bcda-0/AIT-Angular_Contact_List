@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, last } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 import { environment } from 'src/environments/environment.firebase';
 import { IAuthResponseData } from '../models/IAuthResponseData.interface';
@@ -11,107 +12,72 @@ import { IAuthResponseData } from '../models/IAuthResponseData.interface';
 export class UserSettingsService {
   http = inject(HttpClient);
 
-  private userDataSource = new BehaviorSubject<any>(
-    JSON.parse(localStorage.getItem('userData')!)
-  );
+  private userDataSource = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userData')!));
 
   user = this.userDataSource.asObservable();
 
-  refreshUser() {
+  refreshUser(): void {
     this.userDataSource.next(JSON.parse(localStorage.getItem('userData')!));
   }
 
-  getUSfromDatabase(user: IAuthResponseData): Observable<{ idDB: string; localId: string; name: string; surname: string; }> {
+  async getUSfromDatabaseAsync(user: IAuthResponseData): Promise<{ idDB: string; localId: string; name: string; surname: string; }> {
     let isFound: boolean = false;
 
-    const URL: string =
-      environment.firebaseConfig.databaseURL +
-      '/users.json';
-    return new Observable((observer) => {
-      this.http.get<{ [key: string]: IAuthResponseData }>(URL).subscribe({
-        next: (data) => {
-          let idDB: string = '';
-          let localId: string = '';
-          let name: string = '';
-          let surname: string = '';
+    const URL: string = environment.firebaseConfig.databaseURL + '/users.json';
 
-          if (data !== null) {
-            const users = Object.keys(data).map((idDB) => ({
-              idDB,
-              ...data[idDB],
-            }));
-            let searchId: string = user.localId;
-            for (const Resuser of users) {
-              if (Resuser.localId === searchId) {
-                console.log('Pronađen user u bazi.');
-                idDB = Resuser.idDB;
-                localId = Resuser.localId;
-                name = Resuser.name!;
-                surname = Resuser.surname!;
-                isFound = true;
-                break;
-              } else {
-                console.log('Nije pronađen user u bazi.');
-              }
-            }
-            if (isFound === false) {
-              let userSettingsData: { name: string; surname: string } =
-                this.createUniqueUS();
-              name = userSettingsData.name;
-              surname = userSettingsData.surname;
-              this.storeUSinDatabase(user, name, surname);
-              this.storeUSinLocalStorage(user, name, surname);
-            }
-          } else {
-            console.log('Nema podataka u bazi.');
-          }
+    const data = await lastValueFrom(this.http.get<{ [key: string]: IAuthResponseData }>(URL));
 
-          observer.next({ idDB, localId, name, surname });
-          observer.complete();
-        },
-        error: (err) => {
-          observer.error(err);
-        },
-      });
-    });
+    let idDB: string = '';
+    let localId: string = '';
+    let name: string = '';
+    let surname: string = '';
+
+    if (data !== null) {
+      const users = Object.keys(data).map((idDB) => ({ idDB, ...data[idDB], }));
+      let searchId: string = user.localId;
+      for (const Resuser of users) {
+        if (Resuser.localId === searchId) {
+          idDB = Resuser.idDB;
+          localId = Resuser.localId;
+          name = Resuser.name!;
+          surname = Resuser.surname!;
+          isFound = true;
+          break;
+        }
+      }
+      if (isFound === false) {
+        let userSettingsData: { name: string; surname: string } =
+          this.createUniqueUS();
+        name = userSettingsData.name;
+        surname = userSettingsData.surname;
+        await this.storeUSinDatabaseAsync(user, name, surname);
+        this.storeUSinLocalStorage(user, name, surname);
+      }
+    }
+    return { idDB, localId, name, surname };
   }
 
-  storeUSinDatabase(user: IAuthResponseData, name: string, surname: string): void {
+  async storeUSinDatabaseAsync(user: IAuthResponseData, name: string, surname: string): Promise<void> {
+    try {
+      const localId: string = user.localId;
+      const dataToSave = { localId, name, surname };
+      const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/users.json?auth=` + user.idToken;
+
+      const http = await lastValueFrom(this.http.post(dataBaseURL, dataToSave));
+    } catch {
+      console.log('Greška pri spremanju u bazu.');
+    }
+  }
+
+  async updateUSinDatabaseAsync(user: IAuthResponseData, name: string, surname: string): Promise<void> {
+    const userSettingsData: any = await this.getUSfromDatabaseAsync(user);
+    
     const localId: string = user.localId;
+    const idDB: string = userSettingsData.idDB;
     const dataToSave = { localId, name, surname };
-    const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/users.json`;
+    const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/users/${idDB}.json`;
 
-    this.http.post(dataBaseURL, dataToSave).subscribe({
-      next: () => {
-        console.log('Spremljeno u bazu.');
-      },
-      error: () => {
-        console.log('Greška pri spremanju u bazu.');
-      },
-    });
-  }
-
-  updateUSinDatabase(user: IAuthResponseData, name: string, surname: string): void {
-    this.getUSfromDatabase(user).subscribe({
-      next: (userSettingsData: any) => {
-        const localId: string = user.localId;
-        const idDB: string = userSettingsData.idDB;
-        const dataToSave = { localId, name, surname };
-        const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/users/${idDB}.json`;
-
-        this.http.put(dataBaseURL, dataToSave).subscribe({
-          next: () => {
-            console.log('Azurirano u bazu.');
-          },
-          error: () => {
-            console.log('Greška pri spremanju u bazu.');
-          },
-        });
-      },
-      error: (err) => {
-        // Error handler
-      },
-    });
+    await lastValueFrom(this.http.put(dataBaseURL, dataToSave));
   }
 
   storeUSinLocalStorage(user: IAuthResponseData, name: string, surname: string): void {
