@@ -81,7 +81,9 @@ export class LoginComponent {
         } else {
             //* SIGNUP
             try {
+                this.isPasswordResetVisible = false;
                 authObs = await this.authService.signupAsync(email, password);
+                this.emailForPasswordReset = email;
                 this.isLoading = false;
                 this.router.navigate(['/core']);
             } catch {
@@ -93,6 +95,7 @@ export class LoginComponent {
 
     onSwitchMode(): void {
         this.isLoginMode = !this.isLoginMode;
+        this.isPasswordResetVisible = !this.isPasswordResetVisible;
     }
 
     errorHandling(error: string | null): void {
