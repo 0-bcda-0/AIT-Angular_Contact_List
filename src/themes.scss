@@ -4,7 +4,6 @@
 @import 'node_modules/@angular/material/theming';
 @include mat-core();
 
-/* For use in src/lib/core/theming/_palette.scss */
 $cyan-pallet: (
     50 : #e8f5f6,
     100 : #c5e7e8,
@@ -38,7 +37,6 @@ $cyan-pallet: (
     )
 );
 
-/* For use in src/lib/core/theming/_palette.scss */
 $teal-pallet: (
     50 : #e0f2f1,
     100 : #b3e0db,
@@ -105,6 +103,27 @@ $my-theme: $dark-theme;
     
     .title{
         color: black !important;
+    }
+
+    mat-dialog-actions button:disabled{
+        color: grey !important;
+        background-color: lightgrey !important;
+    }
+
+    .whiteThemeFix{
+        color: white !important;
+    }
+
+    mat-card-header button {
+        color: white !important;
+    }
+
+    mat-toolbar {
+        color: white !important;
+    }
+
+    .mat-step-icon{
+        color: white !important;
     }
 
     @include angular-material-theme($my-theme);

@@ -90,8 +90,8 @@
     </mat-vertical-stepper>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
-    <button mat-raised-button color="primary" (click)="onSubmitAsync()"
+    <button mat-button color="primary" (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
+    <button mat-raised-button color="primary" class="whiteThemeFix" (click)="onSubmitAsync()"
         [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid"
         *ngIf="!isViewOnly || isEditMode">Spremi kontakt</button>
 </mat-dialog-actions>
