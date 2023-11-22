@@ -91,6 +91,10 @@ $light-theme: mat.define-light-theme((
 
 $my-theme: $dark-theme;
 
+mat-slide-toggle label {
+    color: black !important;
+}
+
 @include angular-material-theme($my-theme);
 
 .alternative {
@@ -123,6 +127,10 @@ $my-theme: $dark-theme;
     }
 
     .mat-step-icon{
+        color: white !important;
+    }
+
+    mat-slide-toggle label {
         color: white !important;
     }
 
