@@ -10,7 +10,7 @@ import { lastValueFrom } from 'rxjs';
 import { IAuthResponseData } from 'src/app/models/IAuthResponseData.interface';
 
 import { AuthService } from 'src/app/services/auth.service';
-import { MySnackbarService } from 'src/app/services/my-snackbar.service';
+import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { environment } from 'src/environments/environment.firebase';
 
@@ -30,14 +30,12 @@ import { environment } from 'src/environments/environment.firebase';
 export class UserSettingsComponent implements OnInit {
   authService = inject(AuthService);
   http = inject(HttpClient);
-  MySnackbarService = inject(MySnackbarService);
+  mySnackbarService = inject(mySnackbarService);
   userSettingsService = inject(UserSettingsService);
 
   currentUser!: IAuthResponseData;
   nameToDisplay: string | undefined;
   surnameToDisplay: string | undefined;
-
-  subscription: any;
 
   ngOnInit(): void {
     this.currentUser = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null;
@@ -55,12 +53,12 @@ export class UserSettingsComponent implements OnInit {
     try {
       await this.userSettingsService.updateUSinDatabaseAsync(this.currentUser, name, surname);
       this.userSettingsService.storeUSinLocalStorage(this.currentUser, name, surname);
-      this.MySnackbarService.openSnackBar('Korisnički podaci uspješno promjenjeni.', 'Zatvori', 'success');
+      this.mySnackbarService.openSnackBar('Korisnički podaci uspješno promjenjeni.', 'Zatvori', 'success');
       setTimeout(() => {
         window.location.reload();
       }, 2000);
     } catch {
-      this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom promjene korisničkih podataka', 'Zatvori', 'error');
+      this.mySnackbarService.openSnackBar('Došlo je do pogreške prilikom promjene korisničkih podataka', 'Zatvori', 'error');
     }
   }
 
@@ -75,10 +73,10 @@ export class UserSettingsComponent implements OnInit {
 
       const data = await lastValueFrom(this.http.post(url, requestBody));
       if (data !== null) {
-        this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke poslan uspješno.', 'Zatvori', 'success');
+        this.mySnackbarService.openSnackBar('Zahtjev za promjenu lozinke poslan uspješno.', 'Zatvori', 'success');
       }
     } catch {
-      this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
+      this.mySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
     }
   }
 

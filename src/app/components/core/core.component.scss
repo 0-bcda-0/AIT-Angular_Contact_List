@@ -1,4 +1,5 @@
-$primary-color: #c72a68;
+@import "/src/themes.scss";
+
 
 .nav-list {
     display: flex;
@@ -21,8 +22,8 @@ $primary-color: #c72a68;
         }
 
         &.active {
-            color: $primary-color;
-            border-bottom: 1px solid $primary-color;
+            color: map-get($cyan-pallet, 500);
+            border-bottom: 1px solid map-get($cyan-pallet, 500);
         }
     }
 }
@@ -40,7 +41,6 @@ $primary-color: #c72a68;
     font-weight: 500;
     text-decoration: none;
     color: inherit;
-    // color: #fff;
     // Mozda janky i mozda se ne smije medutim stavljeno iz razloga sto pri hoveru i activu ostatak komponenti se pomice gore dolje jer se tek tada pojavljuje border
     border-bottom: 1px solid transparent;
 
@@ -50,7 +50,7 @@ $primary-color: #c72a68;
     }
 
     &.active {
-        color: $primary-color;
-        border-bottom: 1px solid $primary-color;
+        color: map-get($cyan-pallet, 500);
+        border-bottom: 1px solid map-get($cyan-pallet, 500);
     }
 }

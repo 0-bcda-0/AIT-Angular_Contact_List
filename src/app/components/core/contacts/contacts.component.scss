@@ -4,6 +4,10 @@ mat-card {
     margin-top: 5%;
 }
 
+.card{
+    padding: 16px;
+}
+
 .mat-mdc-row .mat-mdc-cell {
     border-bottom: 1px solid transparent;
     border-top: 1px solid transparent;
@@ -76,11 +80,9 @@ th {
         margin-top: 20px;
         flex-direction: column-reverse;
         align-items: flex-start;
-        // width: 100%;
     }
 
     .table-container {
-        // width: 100%;
         margin: 0;
         padding: 0;
     }

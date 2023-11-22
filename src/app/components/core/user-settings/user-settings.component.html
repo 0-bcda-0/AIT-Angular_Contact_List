@@ -8,7 +8,7 @@
                 <mat-card-title>Promjena korisničkih podataka</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <form #f="ngForm" (ngSubmit)="onSubmitAsync(f)">
+                <form #formGroup="ngForm" (ngSubmit)="onSubmitAsync(formGroup)">
                     <div class="input-container">
                         <mat-form-field appearance="outline">
                             <mat-label>Ime</mat-label>
@@ -19,7 +19,7 @@
                             <input matInput type="text" ngModel name="surname" required #surname="ngModel" [(ngModel)]="surnameToDisplay">
                         </mat-form-field>
                     </div>
-                    <button mat-raised-button color="primary" type="submit" name="submit" [disabled]="!f.touched">Promjeni</button>
+                    <button mat-raised-button color="primary" type="submit" name="submit" [disabled]="!formGroup.touched">Promjeni</button>
                 </form>
             </mat-card-content>
         </mat-card>

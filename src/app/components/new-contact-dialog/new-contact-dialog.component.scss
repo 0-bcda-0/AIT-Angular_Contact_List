@@ -1,3 +1,5 @@
+@import "/src/themes.scss";
+
 .flexc {
     display: flex;
     flex-direction: column;
@@ -9,6 +11,7 @@
 //     display: block;
 //     margin-bottom: 10px; /* Optional: Add some spacing between the fields */
 // }  
+
 ::ng-deep .mat-vertical-stepper-content {
     // Mora ici !important jer inace Angular to overrida
     visibility: visible !important;
@@ -62,7 +65,7 @@
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #e91e63 #424242;
+    scrollbar-color: map-get($cyan-pallet, 500);
 }
 
 /* Chrome, Edge, and Safari */
@@ -70,12 +73,7 @@
     width: 12px;
 }
 
-*::-webkit-scrollbar-track {
-    background: #424242;
-}
-
 *::-webkit-scrollbar-thumb {
-    background-color: #e91e63;
+    background-color: map-get($cyan-pallet, 500);
     border-radius: 20px;
-    border: 3px solid #424242;
 }

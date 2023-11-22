@@ -28,7 +28,6 @@ export class CoreComponent implements OnInit {
     authService = inject(AuthService);
     userSettingsService = inject(UserSettingsService);
 
-    subscription: any;
     currentUser: User | null = null;
     isMenuOpen: boolean = false;
 

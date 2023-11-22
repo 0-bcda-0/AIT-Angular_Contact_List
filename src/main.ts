@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -25,13 +25,15 @@ import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthInterceptor } from './app/shared/auth.interceptor';
+import { CustomMatPaginatorIntl } from './app/components/core/contacts/CustomMatPaginatorIntl';
 
 
 bootstrapApplication(AppComponent, {
     providers: [
         importProvidersFrom(BrowserModule, AppRoutingModule, FormsModule, MatButtonModule, MatInputModule, MatCardModule, MatSidenavModule, MatListModule, MatToolbarModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatStepperModule, MatNativeDateModule, MatDatepickerModule, MatSelectModule, MatFormFieldModule, ReactiveFormsModule, HttpClientModule, MatSnackBarModule),
         provideAnimations(),
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
     ]
 })
     .catch(err => console.error(err));

@@ -13,7 +13,7 @@
         </div>
     </mat-card-header>
     <mat-card-content class="table-container">
-        <div class="flex f-center">
+        <div class="flex flex-center">
             <mat-spinner *ngIf="isLoading"></mat-spinner>
         </div>
         <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}" *ngIf="!isLoading">

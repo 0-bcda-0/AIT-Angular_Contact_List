@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { DatePipe, NgClass, NgIf, NgStyle } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Angular Material
@@ -26,7 +26,7 @@ import { IContact } from '../../../models/contact.interface';
 import { DateFormate } from 'src/app/shared/dateFormat.service';
 import { DialogService } from '../../../services/dialog.service';
 import { environment } from 'src/environments/environment.firebase';
-import { MySnackbarService } from 'src/app/services/my-snackbar.service';
+import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 
 @Component({
     selector: 'app-contacts',
@@ -50,7 +50,7 @@ import { MySnackbarService } from 'src/app/services/my-snackbar.service';
         HttpClientModule,
         NgStyle,
         NgIf,
-        NgClass
+        NgClass,
     ]
 })
 export class ContactsComponent implements AfterViewInit, OnInit {
@@ -59,9 +59,10 @@ export class ContactsComponent implements AfterViewInit, OnInit {
     formBuilder = inject(FormBuilder);
     dateFormatService = inject(DateFormate);
     dialog = inject(MatDialog);
-    MySnackbarService = inject(MySnackbarService);
+    mySnackbarService = inject(mySnackbarService);
     route = inject(ActivatedRoute);
     router = inject(Router);
+    // datePipe = inject(DatePipe);
 
     filterForm!: FormGroup;
     myDataArray: IContact[] = [];
@@ -110,6 +111,11 @@ export class ContactsComponent implements AfterViewInit, OnInit {
                     contact.dateOfBirth = this.dateFormatService.formatDate(contact.dateOfBirth);
                 });
 
+                // this.myDataArray.forEach((contact: IContact) => {
+                //     // contact.dateOfBirth = new Date(contact.dateOfBirth).toLocaleDateString('en-GB');
+                //     contact.dateOfBirth = this.datePipe.transform(contact.dateOfBirth, 'dd.MM.yyyy')!;
+                // });
+
                 //* Za Angular Material Table
                 this.dataSource = new MatTableDataSource(this.myDataArray);
 
@@ -118,7 +124,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
                 this.myDataArray = [];
             }
         } else {
-            this.MySnackbarService.openSnackBar('Korisnik nije autentificiran', 'Zatvorite', 'error');
+            this.mySnackbarService.openSnackBar('Korisnik nije autentificiran', 'Zatvorite', 'error');
         }
     }
 
@@ -129,11 +135,11 @@ export class ContactsComponent implements AfterViewInit, OnInit {
 
     displaySnackbar(type: string): void {
         if (type === 'new') {
-            this.MySnackbarService.openSnackBar('Uspješno spremanje kontakta', 'Zatvori', 'success');
+            this.mySnackbarService.openSnackBar('Uspješno spremanje kontakta', 'Zatvori', 'success');
         } else if (type === 'edit') {
-            this.MySnackbarService.openSnackBar('Uspješno uređivanje kontakta', 'Zatvori', 'success');
+            this.mySnackbarService.openSnackBar('Uspješno uređivanje kontakta', 'Zatvori', 'success');
         } else if (type === 'delete') {
-            this.MySnackbarService.openSnackBar('Uspješno brisanje kontakta', 'Zatvori', 'success');
+            this.mySnackbarService.openSnackBar('Uspješno brisanje kontakta', 'Zatvori', 'success');
         }
     }
 
@@ -192,21 +198,20 @@ export class ContactsComponent implements AfterViewInit, OnInit {
                 this.DeleteContactAsync(element);
             }
         } catch (error) {
-            this.MySnackbarService.openSnackBar('Greška pri otvaranju dialoga', 'Zatvori', 'error');
+            this.mySnackbarService.openSnackBar('Došlo je do greške prilikom otvaranja dialoga', 'Zatvori', 'error');
         }
     }
 
     async DeleteContactAsync(element: IContact): Promise<void> {
         try {
-            const id: string = element.id!;
-            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json`;
+            const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${element.id}.json`;
 
             await lastValueFrom(this.http.delete(dataBaseURL));
 
-            this.MySnackbarService.openSnackBar('Data has been successfully deleted from the database.', 'Zatvori', 'success');
+            this.mySnackbarService.openSnackBar('Kontakt uspješno izbrisan.', 'Zatvori', 'success');
             this.router.navigate(['/core'], { queryParams: { r: true, type: 'delete' } });
         } catch (error) {
-            this.MySnackbarService.openSnackBar('Greška pri brisanju kontakta', 'Zatvori', 'error');
+            this.mySnackbarService.openSnackBar('Došlo je do greške prilikom brisanja kontakta. ', 'Zatvori', 'error');
         }
     }
 

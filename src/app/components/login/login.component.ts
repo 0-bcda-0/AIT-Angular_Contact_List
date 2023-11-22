@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgIf, NgStyle } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Observable, lastValueFrom } from 'rxjs';
 
 // Angular Material
@@ -16,7 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // My Imports
 import { AuthService } from '../../services/auth.service';
 import { IAuthResponseData } from '../../models/IAuthResponseData.interface';
-import { MySnackbarService } from 'src/app/services/my-snackbar.service';
+import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 import { environment } from 'src/environments/environment.firebase';
 
 @Component({
@@ -33,13 +33,12 @@ import { environment } from 'src/environments/environment.firebase';
         HttpClientModule,
         MatProgressSpinnerModule,
         NgIf,
-        NgStyle,
     ]
 })
 export class LoginComponent {
     router = inject(Router);
     authService = inject(AuthService);
-    MySnackbarService = inject(MySnackbarService);
+    mySnackbarService = inject(mySnackbarService);
     http = inject(HttpClient);
 
     isLoginMode: boolean = true;
@@ -87,7 +86,7 @@ export class LoginComponent {
                 this.isLoading = false;
                 this.router.navigate(['/core']);
             } catch {
-                this.MySnackbarService.openSnackBar('Greška u registraciji', 'Zatvori', 'error');
+                this.mySnackbarService.openSnackBar('Došlo je do greške prilikom registracije.', 'Zatvori', 'error');
             }
         }
         form.reset();
@@ -121,11 +120,11 @@ export class LoginComponent {
                 this.errorMessagePosition = 2;
                 break;
             default:
-                message = 'Greška';
+                message = 'Došlo je do greške prilikom prijave.';
                 break;
         }
         this.errorMessageHTML = message;
-        this.MySnackbarService.openSnackBar(message, 'Zatvori', 'error');
+        this.mySnackbarService.openSnackBar(message, 'Zatvori', 'error');
     }
 
     async sendPRMwMAsync(email: string): Promise<void> {
@@ -139,10 +138,10 @@ export class LoginComponent {
 
             const data = await lastValueFrom(this.http.post(url, requestBody));
             if (data !== null) {
-                this.MySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');
+                this.mySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');
             }
         } catch {
-            this.MySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
+            this.mySnackbarService.openSnackBar('Došlo je do pogreške prilikom slanja zahtjeva za promjenu lozinke.', 'Zatvori', 'error');
         }
     }
 }

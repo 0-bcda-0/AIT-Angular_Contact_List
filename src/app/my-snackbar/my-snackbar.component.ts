@@ -1,4 +1,4 @@
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
@@ -10,13 +10,11 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
   standalone: true,
   imports: [
     MatIconModule,
-    NgStyle,
     NgClass
   ],
 })
-export class MySnackbarComponent {
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {
-  };
+export class mySnackbarComponent {
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {};
 
   get getIcon(): string {
     switch (this.data.snackType) {

@@ -1,6 +1,6 @@
 // Angular
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { lastValueFrom } from 'rxjs';
@@ -11,11 +11,9 @@ import { environment } from 'src/environments/environment.firebase';
 import { UserSettingsService } from './user-settings.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService implements OnDestroy {
+export class AuthService  {
     http = inject(HttpClient);
     userSettingsService = inject(UserSettingsService);
-
-    subscription: any;
 
     user = new BehaviorSubject<User>(null!);
 
@@ -81,7 +79,15 @@ export class AuthService implements OnDestroy {
         token: string,
         expiresIn: number,
     ): void {
-        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        let expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        // TESTING - 30s 
+        // let expirationDate = new Date(new Date().getTime() + 30000);
+
+        let userData = localStorage.getItem('userData');
+        let userDataObj = JSON.parse(userData!);
+        userDataObj.expirationDate = expirationDate;
+        localStorage.setItem('userData', JSON.stringify(userDataObj));
+
         const user = new User(
             email,
             userId,
@@ -89,9 +95,5 @@ export class AuthService implements OnDestroy {
             expirationDate,
         );
         this.user.next(user);
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
     }
 }

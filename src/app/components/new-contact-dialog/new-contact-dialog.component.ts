@@ -2,7 +2,7 @@
 import { Component, inject, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NgIf, NgStyle } from '@angular/common';
+import { DatePipe, NgIf, NgStyle } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -21,7 +21,7 @@ import { DateFormate } from 'src/app/shared/dateFormat.service';
 import { IContact } from '../../models/contact.interface';
 import { ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { environment } from 'src/environments/environment.firebase';
-import { MySnackbarService } from 'src/app/services/my-snackbar.service';
+import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 
 @Component({
     selector: 'app-new-contact-dialog',
@@ -42,7 +42,8 @@ import { MySnackbarService } from 'src/app/services/my-snackbar.service';
         MatButtonModule,
         NgIf,
         NgStyle,
-        MatDialogModule
+        MatDialogModule,
+        DatePipe
     ],
 })
 export class NewContactDialogComponent {
@@ -52,7 +53,8 @@ export class NewContactDialogComponent {
     dateFormatService = inject(DateFormate);
     dialog = inject(MatDialog);
     router = inject(Router);
-    MySnackbarService = inject(MySnackbarService);
+    mySnackbarService = inject(mySnackbarService);
+    // datePipe = inject(DatePipe);
 
     PIFormGroup!: FormGroup;
     LIFormGroup!: FormGroup;
@@ -92,6 +94,7 @@ export class NewContactDialogComponent {
             }
 
             const formatedDate: string = this.dateFormatService.formatDate(this.data.dateOfBirth);
+            // const formatedDate: string = this.datePipe.transform(this.data.dateOfBirth, 'YYYY-MM-DDT00:00:00.000Z')!;
 
             this.PIFormGroup = this._formBuilder.group({
                 name: [{ value: this.dataInForm!.name, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
@@ -141,11 +144,11 @@ export class NewContactDialogComponent {
                     this.closeDialog();
                     this.router.navigate(['/core'], { queryParams: { r: true, type: 'new' } });
                 } catch {
-                    this.MySnackbarService.openSnackBar('Pogreška pri spremanju.', 'Zatvori', 'error');
+                    this.mySnackbarService.openSnackBar('Pogreška pri spremanju.', 'Zatvori', 'error');
                 }
             } else {
                 //* Korisnih nije autentificiran
-                this.MySnackbarService.openSnackBar('Korisnik nije autentificiran.', 'Zatvori', 'info');
+                this.mySnackbarService.openSnackBar('Korisnik nije autentificiran.', 'Zatvori', 'info');
             }
         } else {
             //! Edit
@@ -174,11 +177,11 @@ export class NewContactDialogComponent {
                     this.closeDialog();
                     this.router.navigate(['/core'], { queryParams: { r: true, type: 'edit' } });
                 } catch {
-                    this.MySnackbarService.openSnackBar('Pogreška pri uređivanju.', 'Zatvori', 'error');
+                    this.mySnackbarService.openSnackBar('Pogreška pri uređivanju.', 'Zatvori', 'error');
                 }
             } else {
                 //* Korisnik nije autentificiran
-                this.MySnackbarService.openSnackBar('Korisnik nije autentificiran.', 'Zatvori', 'info');
+                this.mySnackbarService.openSnackBar('Korisnik nije autentificiran.', 'Zatvori', 'info');
             }
         }
     }
