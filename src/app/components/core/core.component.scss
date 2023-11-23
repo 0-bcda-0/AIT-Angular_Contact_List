@@ -1,6 +1,5 @@
 @import "/src/themes.scss";
 
-
 .nav-list {
     display: flex;
     flex-direction: column;
@@ -26,10 +25,6 @@
             border-bottom: 1px solid map-get($cyan-pallet, 500);
         }
     }
-}
-
-.lastChild {
-    margin-left: auto;
 }
 
 .nav-icon {

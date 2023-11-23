@@ -2,7 +2,7 @@
 import { Component, inject, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { DatePipe, NgIf, NgStyle } from '@angular/common';
+import { NgIf, NgStyle } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -43,7 +43,6 @@ import { mySnackbarService } from 'src/app/services/my-snackbar.service';
         NgIf,
         NgStyle,
         MatDialogModule,
-        DatePipe
     ],
 })
 export class NewContactDialogComponent {
@@ -54,7 +53,6 @@ export class NewContactDialogComponent {
     dialog = inject(MatDialog);
     router = inject(Router);
     mySnackbarService = inject(mySnackbarService);
-    // datePipe = inject(DatePipe);
 
     PIFormGroup!: FormGroup;
     LIFormGroup!: FormGroup;
@@ -94,7 +92,6 @@ export class NewContactDialogComponent {
             }
 
             const formatedDate: string = this.dateFormatService.formatDate(this.data.dateOfBirth);
-            // const formatedDate: string = this.datePipe.transform(this.data.dateOfBirth, 'YYYY-MM-DDT00:00:00.000Z')!;
 
             this.PIFormGroup = this._formBuilder.group({
                 name: [{ value: this.dataInForm!.name, disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
@@ -186,7 +183,7 @@ export class NewContactDialogComponent {
         }
     }
 
-    closeDialog(): void {
+    private closeDialog(): void {
         this.dialogRef.close();
     }
 

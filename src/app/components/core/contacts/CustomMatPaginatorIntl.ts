@@ -4,19 +4,13 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 
 @Injectable()
 export class CustomMatPaginatorIntl extends MatPaginatorIntl {
-    constructor() {
-        super();
-
-        this.getAndInitTranslations();
-    }
+    constructor() {super();this.getAndInitTranslations();}
 
     getAndInitTranslations() {
-
         this.itemsPerPageLabel = "Broj stavki po stranici:";
         this.nextPageLabel = "Broj stavki po stranici:";
         this.previousPageLabel = "Broj stavki po stranici:";
         this.changes.next();
-
     }
 
     override getRangeLabel = (page: number, pageSize: number, length: number) => {

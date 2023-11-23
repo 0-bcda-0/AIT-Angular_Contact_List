@@ -3,10 +3,6 @@
 
 @import '/src/pallets.scss';
 
-// @import '/node_modules/@angular/material/core/theming/theming';
-// @include mat.core();
-// @include mat-core();
-
 // Define a dark theme
 $dark-theme: mat.define-dark-theme((
     color: (
@@ -14,8 +10,8 @@ $dark-theme: mat.define-dark-theme((
         accent: mat.define-palette($teal-pallet),
     ),
     // Only include `typography` and `density` in the default dark theme.
-        typography: mat.define-typography-config(),
-        density: 0,
+    typography: mat.define-typography-config(),
+    density: 0,
 ));
 
 // Define a light theme
@@ -32,7 +28,6 @@ mat-slide-toggle label {
     color: black !important;
 }
 
-// @include angular-material-theme($my-theme);
 @include mat.all-component-themes($my-theme);
 
 .alternative {
@@ -72,7 +67,5 @@ mat-slide-toggle label {
         color: white !important;
     }
 
-    // @include angular-material-theme($my-theme);
-    // @include mat.all-component-themes($my-theme);
     @include mat.all-component-colors($my-theme);
 }

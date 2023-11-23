@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { DatePipe, NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Angular Material
@@ -62,7 +62,6 @@ export class ContactsComponent implements AfterViewInit, OnInit {
     mySnackbarService = inject(mySnackbarService);
     route = inject(ActivatedRoute);
     router = inject(Router);
-    // datePipe = inject(DatePipe);
 
     filterForm!: FormGroup;
     myDataArray: IContact[] = [];
@@ -73,17 +72,15 @@ export class ContactsComponent implements AfterViewInit, OnInit {
     dataSource = new MatTableDataSource(this.myDataArray);
     columnsToDisplay: string[] = ['id', 'name', 'surname', 'dateOfBirth', 'street', 'postalCode', 'phonePrefix', 'phoneNumber', 'actions'];
 
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
+    @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {this.dataSource.paginator = paginator;}
+    @ViewChild(MatSort) set matSort(sort: MatSort) {this.dataSource.sort = sort;}
 
     ngOnInit() {
-        this.filterForm = this.formBuilder.group({
-            search: [''],
-        });
+        this.filterForm = this.formBuilder.group({search: ['']});
         this.getDataAsync();
     }
 
-    async getDataAsync(): Promise<void> {
+    private async getDataAsync(): Promise<void> {
         const user: string | null = localStorage.getItem('userData');
 
         if (user) {
@@ -111,11 +108,6 @@ export class ContactsComponent implements AfterViewInit, OnInit {
                     contact.dateOfBirth = this.dateFormatService.formatDate(contact.dateOfBirth);
                 });
 
-                // this.myDataArray.forEach((contact: IContact) => {
-                //     // contact.dateOfBirth = new Date(contact.dateOfBirth).toLocaleDateString('en-GB');
-                //     contact.dateOfBirth = this.datePipe.transform(contact.dateOfBirth, 'dd.MM.yyyy')!;
-                // });
-
                 //* Za Angular Material Table
                 this.dataSource = new MatTableDataSource(this.myDataArray);
 
@@ -128,12 +120,12 @@ export class ContactsComponent implements AfterViewInit, OnInit {
         }
     }
 
-    async refreshDataAsync(type: string): Promise<void> {
+    private async refreshDataAsync(type: string): Promise<void> {
         await this.getDataAsync();
         this.displaySnackbar(type);
     }
 
-    displaySnackbar(type: string): void {
+    private displaySnackbar(type: string): void {
         if (type === 'new') {
             this.mySnackbarService.openSnackBar('Uspješno spremanje kontakta', 'Zatvori', 'success');
         } else if (type === 'edit') {
@@ -150,19 +142,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
                 //* Dohvacanje podataka isto kao i u constructoru sa dodatnim snackbarom
                 this.refreshDataAsync(params['type']);
                 //* Micemo parametre
-                this.router.navigate(['/core'], { queryParams: {} }).then(() => {
-                    setTimeout(() => {
-                        this.dataSource.paginator = this.paginator;
-                        this.dataSource.sort = this.sort;
-                    }, 1000);
-                });
-            } else {
-                setTimeout(
-                    () => {
-                        this.dataSource.paginator = this.paginator;
-                        this.dataSource.sort = this.sort;
-                    }
-                    , 1000);
+                this.router.navigate(['/core'], { queryParams: {} }).then(() => {});
             }
         });
     }
@@ -202,7 +182,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
         }
     }
 
-    async DeleteContactAsync(element: IContact): Promise<void> {
+    private async DeleteContactAsync(element: IContact): Promise<void> {
         try {
             const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${element.id}.json`;
 

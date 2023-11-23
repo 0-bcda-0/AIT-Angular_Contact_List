@@ -9,4 +9,5 @@ export interface IContact {
     phonePrefix: number;
     phoneNumber: number;
     useruid?: string;
+    edit?: boolean;
 }

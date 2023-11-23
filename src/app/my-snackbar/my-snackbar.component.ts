@@ -14,7 +14,7 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
   ],
 })
 export class mySnackbarComponent {
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {};
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) { };
 
   get getIcon(): string {
     switch (this.data.snackType) {

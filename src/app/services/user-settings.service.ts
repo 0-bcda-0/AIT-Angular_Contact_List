@@ -70,7 +70,7 @@ export class UserSettingsService {
   }
 
   async updateUSinDatabaseAsync(user: IAuthResponseData, name: string, surname: string): Promise<void> {
-    const userSettingsData: any = await this.getUSfromDatabaseAsync(user);
+    const userSettingsData: { idDB: string; localId: string; name: string; surname: string; } = await this.getUSfromDatabaseAsync(user);
     
     const localId: string = user.localId;
     const idDB: string = userSettingsData.idDB;

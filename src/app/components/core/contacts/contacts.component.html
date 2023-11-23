@@ -2,8 +2,9 @@
     <mat-card-header class="header-container">
         <mat-card-title>Kontakti</mat-card-title>
         <div class="header-rightFlex">
-            <button mat-raised-button color="primary" (click)="openDialog()" class="btn-small-fullWidth">Unesi
-                kontakt</button>
+            <button mat-raised-button  (click)="openDialog()" color="primary">
+                Unesi kontakt
+                </button>
             <form [formGroup]="filterForm" class="search-bar">
                 <mat-form-field appearance="outline">
                     <mat-label>Pretražite kontakte</mat-label>
@@ -13,11 +14,6 @@
         </div>
     </mat-card-header>
     <mat-card-content class="table-container">
-        <div class="flex flex-center">
-            @if (isLoading){
-            <mat-spinner></mat-spinner>
-            }
-        </div>
         @if(!isLoading){
         <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}">
             <ng-container matColumnDef="id">
@@ -93,6 +89,8 @@
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
         </table>
+    } @else {
+        <div class="flex flex-center"><mat-spinner></mat-spinner></div>
     }
     </mat-card-content>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
