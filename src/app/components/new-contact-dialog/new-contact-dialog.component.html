@@ -10,16 +10,18 @@
                             <mat-label>Ime</mat-label>
                             <input matInput type="text" formControlName="name" required>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="name?.touched && !name?.valid">Unesite ime ispravnog
-                            formata</mat-error>
+                        @if(name?.touched && !name?.valid){
+                            <mat-error class="errorMessage">Unesite ime ispravnog formata</mat-error>
+                        }
                     </div>
                     <div class="input-container">
                         <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
                             <mat-label>Prezime</mat-label>
                             <input matInput type="text" formControlName="surname" required>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="surname?.touched && !surname?.valid">Unesite prezime
-                            ispravnog formata</mat-error>
+                        @if(surname?.touched && !surname?.valid){
+                            <mat-error class="errorMessage">Unesite prezime ispravnog formata</mat-error>
+                        }
                     </div>
                     <div class="input-container">
                         <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
@@ -29,8 +31,9 @@
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="dateOfBirth?.touched && !dateOfBirth?.valid">Unesite
-                            datum ispravnog formata</mat-error>
+                        @if(dateOfBirth?.touched && !dateOfBirth?.valid){
+                            <mat-error class="errorMessage">Unesite datum ispravnog formata</mat-error>
+                        }
                     </div>
                 </div>
             </form>
@@ -43,8 +46,9 @@
                             <mat-label>Ulica</mat-label>
                             <input matInput type="text" formControlName="street" required>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="street?.touched && !street?.valid">Unesite ulicu
-                            ispravnog formata</mat-error>
+                        @if(street?.touched && !street?.valid){
+                            <mat-error class="errorMessage">Unesite ulicu ispravnog formata</mat-error>
+                        }
                     </div>
                     <div class="input-container">
                         <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
@@ -52,9 +56,9 @@
                             <input matInput type="number" formControlName="postalCode"
                                 (input)="limitInputToCharacters($event, 5)" required>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="postalCode?.touched && !postalCode?.valid">Unesite
-                            poštanski
-                            broj ispravnog formata</mat-error>
+                        @if(postalCode?.touched && !postalCode?.valid){
+                            <mat-error class="errorMessage">Unesite poštanski broj ispravnog formata</mat-error>
+                        }
                     </div>
                 </div>
             </form>
@@ -71,9 +75,9 @@
                                 <mat-option value="099">099</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="phonePrefix?.touched && !phonePrefix?.valid">Unesite
-                            predbroj
-                            telefona</mat-error>
+                        @if(phonePrefix?.touched && !phonePrefix?.valid){
+                            <mat-error class="errorMessage">Unesite predbroj telefona</mat-error>
+                        }
                     </div>
                     <div class="input-container">
                         <mat-form-field class="m-10" appearance="outline" subscriptSizing="dynamic">
@@ -81,8 +85,9 @@
                             <input matInput type="number" formControlName="phoneNumber"
                                 (input)="limitInputToCharacters($event, 7)" required>
                         </mat-form-field>
-                        <mat-error class="errorMessage" *ngIf="phoneNumber?.touched && !phoneNumber?.valid">Unesite broj
-                            telefona ispravnog formata</mat-error>
+                        @if(phoneNumber?.touched && !phoneNumber?.valid){
+                            <mat-error class="errorMessage">Unesite broj telefona ispravnog formata</mat-error>
+                        }
                     </div>
                 </div>
             </form>
@@ -91,7 +96,9 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button color="primary" (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
-    <button mat-raised-button color="primary" class="whiteThemeFix" (click)="onSubmitAsync()"
+    @if(!isViewOnly || isEditMode){
+        <button mat-raised-button color="primary" class="whiteThemeFix" (click)="onSubmitAsync()"
         [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid"
-        *ngIf="!isViewOnly || isEditMode">Spremi kontakt</button>
+        >Spremi kontakt</button>
+    }
 </mat-dialog-actions>

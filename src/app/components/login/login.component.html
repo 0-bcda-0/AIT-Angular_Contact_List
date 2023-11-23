@@ -4,9 +4,12 @@
     </mat-card-header>
     <mat-card-content>
         <div class="flex flex-center">
-            <mat-spinner *ngIf="isLoading"></mat-spinner>
+            @if(isLoading){
+                <mat-spinner></mat-spinner>
+            }
         </div>
-        <form class="flex flex-center" style="flex-direction: column;" #formGroup="ngForm" (ngSubmit)="onSubmit(formGroup)" *ngIf="!isLoading">
+        @if(!isLoading){
+        <form class="flex flex-center" style="flex-direction: column;" #formGroup="ngForm" (ngSubmit)="onSubmit(formGroup)">
             <mat-form-field appearance="outline">
                 <mat-label>E-Mail</mat-label>
                 <input matInput
@@ -18,8 +21,12 @@
                         #email="ngModel"
                 >
             </mat-form-field>
-            <span class="errorMessage" *ngIf="isError && errorMessagePosition==1">{{ errorMessageHTML }}</span>
-            <span class="errorMessage" *ngIf="!email.valid && email.touched">Unesite e-mail ispravnog formata</span>
+            @if(isError && errorMessagePosition==1){
+                <span class="errorMessage">{{ errorMessageHTML }}</span>
+            }
+            @if(!email.valid && email.touched){
+                <span class="errorMessage">Unesite e-mail ispravnog formata</span>
+            }
             <mat-form-field appearance="outline">
                 <mat-label>Zaporka</mat-label>
                 <input matInput
@@ -32,8 +39,12 @@
                         #password="ngModel"
                 >
             </mat-form-field>
-            <span class="errorMessage" *ngIf="isError && errorMessagePosition==2">{{ errorMessageHTML }}</span>
-            <span class="errorMessage" *ngIf="!password.valid && password.touched">Unesite zaporku ispravnog formata</span>
+            @if(isError && errorMessagePosition==2){
+                <span class="errorMessage">{{ errorMessageHTML }}</span>
+            }
+            @if(!password.valid && password.touched){
+                <span class="errorMessage">Unesite zaporku ispravnog formata</span>
+            }
             <button mat-raised-button
                     color="primary"
                     type="submit"
@@ -41,11 +52,14 @@
                     [disabled]="!formGroup.valid"    
             >{{ isLoginMode ? 'Prijavi se' : 'Registriraj se' }}</button>
         </form>
+    }
         <div class="flex flex-center"> 
             <a class="link" (click)="onSwitchMode()">{{ isLoginMode ? 'Registriraj' : 'Prijavi' }} se</a>
         </div>
         <div class="flex flex-center"> 
-            <a class="link" *ngIf="isPasswordResetVisible" (click)="sendPRMwMAsync(emailForPasswordReset)" style="text-align: center;">Pošalji zahtjev za reset lozinke na<br>{{emailForPasswordReset}}</a>
+            @if(isPasswordResetVisible){
+                <a class="link" (click)="sendPRMwMAsync(emailForPasswordReset)" style="text-align: center;">Pošalji zahtjev za reset lozinke na<br>{{emailForPasswordReset}}</a>
+            }
         </div>
     </mat-card-content>
 </mat-card>

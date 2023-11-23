@@ -1,8 +1,9 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-@import 'node_modules/@angular/material/theming';
-@include mat-core();
+// @import '/node_modules/@angular/material/core/theming/theming';
+// @include mat.core();
+// @include mat-core();
 
 $cyan-pallet: (
     50 : #e8f5f6,
@@ -95,7 +96,8 @@ mat-slide-toggle label {
     color: black !important;
 }
 
-@include angular-material-theme($my-theme);
+// @include angular-material-theme($my-theme);
+@include mat.all-component-themes($my-theme);
 
 .alternative {
     background-color: #fff;
@@ -134,5 +136,6 @@ mat-slide-toggle label {
         color: white !important;
     }
 
-    @include angular-material-theme($my-theme);
+    // @include angular-material-theme($my-theme);
+    @include mat.all-component-themes($my-theme);
 }

@@ -14,9 +14,12 @@
     </mat-card-header>
     <mat-card-content class="table-container">
         <div class="flex flex-center">
-            <mat-spinner *ngIf="isLoading"></mat-spinner>
+            @if (isLoading){
+            <mat-spinner></mat-spinner>
+            }
         </div>
-        <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}" *ngIf="!isLoading">
+        @if(!isLoading){
+        <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}">
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Rbr.
                 </th>
@@ -90,6 +93,7 @@
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
         </table>
+    }
     </mat-card-content>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
     </mat-paginator>
