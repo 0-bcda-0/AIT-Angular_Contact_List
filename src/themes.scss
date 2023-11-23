@@ -1,75 +1,11 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
+@import '/src/pallets.scss';
+
 // @import '/node_modules/@angular/material/core/theming/theming';
 // @include mat.core();
 // @include mat-core();
-
-$cyan-pallet: (
-    50 : #e8f5f6,
-    100 : #c5e7e8,
-    200 : #9fd7d8,
-    300 : #78c6c8,
-    400 : #5bbabd,
-    500 : #3eaeb1,
-    600 : #38a7aa,
-    700 : #309da1,
-    800 : #289498,
-    900 : #1b8488,
-    A100 : #c1fdff,
-    A200 : #8efbff,
-    A400 : #5bf9ff,
-    A700 : #41f8ff,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
-);
-
-$teal-pallet: (
-    50 : #e0f2f1,
-    100 : #b3e0db,
-    200 : #80cbc4,
-    300 : #4db6ac,
-    400 : #26a69a,
-    500 : #009688,
-    600 : #008e80,
-    700 : #008375,
-    800 : #00796b,
-    900 : #006858,
-    A100 : #97ffec,
-    A200 : #64ffe3,
-    A400 : #31ffda,
-    A700 : #18ffd5,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
-);
 
 // Define a dark theme
 $dark-theme: mat.define-dark-theme((
@@ -137,5 +73,6 @@ mat-slide-toggle label {
     }
 
     // @include angular-material-theme($my-theme);
-    @include mat.all-component-themes($my-theme);
+    // @include mat.all-component-themes($my-theme);
+    @include mat.all-component-colors($my-theme);
 }
