@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { mySnackbarComponent } from '../my-snackbar/my-snackbar.component';
 
 @Injectable({

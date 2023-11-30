@@ -1,11 +1,8 @@
-// Angular
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { lastValueFrom } from 'rxjs';
-
-// My imports
 import { IAuthResponseData } from '../models/IAuthResponseData.interface';
 import { environment } from 'src/environments/environment.firebase';
 import { UserSettingsService } from './user-settings.service';
@@ -80,9 +77,6 @@ export class AuthService  {
         expiresIn: number,
     ): void {
         let expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-        // TESTING - 30s 
-        // let expirationDate = new Date(new Date().getTime() + 30000);
-
         let userData = localStorage.getItem('userData');
         let userDataObj = JSON.parse(userData!);
         userDataObj.expirationDate = expirationDate;

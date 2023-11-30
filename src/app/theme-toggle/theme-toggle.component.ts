@@ -6,7 +6,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @Component({
     selector: 'app-theme-toggle',
     templateUrl: './theme-toggle.component.html',
-    styleUrls: ['./theme-toggle.component.scss'],
     standalone: true,
     imports: [
         MatSlideToggleModule,

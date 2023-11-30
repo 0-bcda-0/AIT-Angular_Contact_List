@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, last } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { lastValueFrom } from 'rxjs';
-
 import { environment } from 'src/environments/environment.firebase';
 import { IAuthResponseData } from '../models/IAuthResponseData.interface';
 

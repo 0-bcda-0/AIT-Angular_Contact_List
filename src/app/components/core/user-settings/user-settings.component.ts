@@ -39,8 +39,8 @@ export class UserSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null;
-      this.nameToDisplay = this.currentUser.name;
-      this.surnameToDisplay = this.currentUser.surname;
+    this.nameToDisplay = this.currentUser.name;
+    this.surnameToDisplay = this.currentUser.surname;
   }
 
   async onSubmitAsync(form: NgForm): Promise<void> {

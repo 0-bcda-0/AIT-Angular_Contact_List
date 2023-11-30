@@ -6,7 +6,6 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-my-snackbar',
   templateUrl: './my-snackbar.component.html',
-  styleUrls: ['./my-snackbar.component.scss'],
   standalone: true,
   imports: [
     MatIconModule,

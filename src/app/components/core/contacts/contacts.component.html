@@ -1,10 +1,11 @@
-<mat-card class="card" [ngClass]="isLoading ? 'dim' : ''">
+<mat-card class="card">
     <mat-card-header class="header-container">
         <mat-card-title>Kontakti</mat-card-title>
         <div class="header-rightFlex">
-            <button mat-raised-button  (click)="openDialog()" color="primary">
+            <button mat-raised-button (click)="openNewContactDialog(null)" color="primary">
+                <mat-icon>perm_contact_calendar</mat-icon>
                 Unesi kontakt
-                </button>
+            </button>
             <form [formGroup]="filterForm" class="search-bar">
                 <mat-form-field appearance="outline">
                     <mat-label>Pretražite kontakte</mat-label>
@@ -14,85 +15,103 @@
         </div>
     </mat-card-header>
     <mat-card-content class="table-container">
-        @if(!isLoading){
-        <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}">
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Rbr.
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.number }} </td>
-            </ng-container>
+        <div style="display: flex; flex-direction: column; justify-content: space-between; min-height: 370px;">
+            <table mat-table [dataSource]="dataSource" matSort [ngStyle]="{'width':'100%'}">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu">
+                        Rbr.
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.number }} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Ime
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu"> Ime
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="surname">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po prezimenu">
-                    Prezime
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
-            </ng-container>
+                <ng-container matColumnDef="surname">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po prezimenu">
+                        Prezime
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="dateOfBirth">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po datumu"> Datum
-                    Rođenja </th>
-                <td mat-cell *matCellDef="let element"> {{element.dateOfBirth}} </td>
-            </ng-container>
+                <ng-container matColumnDef="dateOfBirth">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po datumu">
+                        Datum
+                        Rođenja </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateOfBirth}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="street">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po ulici"> Ulica
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.street}} </td>
-            </ng-container>
+                <ng-container matColumnDef="street">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po ulici">
+                        Ulica
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.street}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="postalCode">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    sortActionDescription="Sortiraj po poštanskom broju"> Poštanski
-                    broj</th>
-                <td mat-cell *matCellDef="let element"> {{element.postalCode}} </td>
-            </ng-container>
+                <ng-container matColumnDef="postalCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        sortActionDescription="Sortiraj po poštanskom broju"> Poštanski
+                        broj</th>
+                    <td mat-cell *matCellDef="let element"> {{element.postalCode}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="phonePrefix">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po predbroju">
-                    Predbroj
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.phonePrefix}} </td>
-            </ng-container>
+                <ng-container matColumnDef="phonePrefix">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po predbroju">
+                        Predbroj
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.phonePrefix}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="phoneNumber">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    sortActionDescription="Sortiraj po broju telefona"> Broj
-                    telefona</th>
-                <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
-            </ng-container>
+                <ng-container matColumnDef="phoneNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        sortActionDescription="Sortiraj po broju telefona"> Broj
+                        telefona</th>
+                    <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+                </ng-container>
 
-            <ng-container matColumnDef="actions" stickyEnd>
-                <th mat-header-cell *matHeaderCellDef> Akcije </th>
-                <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button color="basic" matTooltip="Pregled kontakta"
-                        (click)="viewContactDialog(element)">
-                        <mat-icon>visibility</mat-icon>
-                    </button>
-                    <button mat-icon-button color="accent" matTooltip="Uređivanje kontakta"
-                        (click)="editContactDialog(element)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" matTooltip="Brisanje kontakta"
-                        (click)="openDeleteDialogAsync(element)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="actions" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef> Akcije </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="basic" matTooltip="Pregled kontakta" class="actions"
+                            (click)="openNewContactDialog(element, false)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" matTooltip="Uređivanje kontakta" class="actions"
+                            (click)="openNewContactDialog(element, true)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" matTooltip="Brisanje kontakta" class="actions"
+                            (click)="openDeleteDialogAsync(element)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
 
-            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-        </table>
-    } @else {
-        <div class="flex flex-center"><mat-spinner></mat-spinner></div>
-    }
+                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Akcije"
+                            class="menu"><mat-icon>menu</mat-icon></button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item color="basic" matTooltip="Pregled kontakta"
+                                (click)="openNewContactDialog(element, false)">
+                                <mat-icon color="basic">visibility</mat-icon>
+                            </button>
+                            <button mat-menu-item color="primary" matTooltip="Uređivanje kontakta"
+                                (click)="openNewContactDialog(element, true)">
+                                <mat-icon color="primary">edit</mat-icon>
+                            </button>
+                            <button mat-menu-item color="warn" matTooltip="Brisanje kontakta"
+                                (click)="openDeleteDialogAsync(element)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements"></mat-paginator>
+        </div>
     </mat-card-content>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-    </mat-paginator>
 </mat-card>

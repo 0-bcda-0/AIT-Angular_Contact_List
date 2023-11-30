@@ -1,19 +1,13 @@
-// Angular
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgIf } from '@angular/common';
 import { Observable, lastValueFrom } from 'rxjs';
-
-// Angular Material
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-// My Imports
 import { AuthService } from '../../services/auth.service';
 import { IAuthResponseData } from '../../models/IAuthResponseData.interface';
 import { mySnackbarService } from 'src/app/services/my-snackbar.service';
@@ -32,7 +26,6 @@ import { environment } from 'src/environments/environment.firebase';
         MatButtonModule,
         HttpClientModule,
         MatProgressSpinnerModule,
-        NgIf,
     ]
 })
 export class LoginComponent {
@@ -43,25 +36,20 @@ export class LoginComponent {
 
     isLoginMode: boolean = true;
     isLoading: boolean = false;
-
     isError: boolean = false;
     errorMessageHTML: string = '';
     errorMessagePosition: number = 0;
     error: string | null = null;
-
     isPasswordResetVisible: boolean = false;
     emailForPasswordReset: string = '';
 
     async onSubmit(form: NgForm): Promise<void> {
         if (!form.valid) {return;}
-
         const email: string = form.value.email;
         const password: string = form.value.password;
-
         this.isLoading = true;
 
         let authObs: Observable<IAuthResponseData> | void;
-
         if (this.isLoginMode) {
             //* LOGIN
             try {
@@ -97,9 +85,7 @@ export class LoginComponent {
 
     private errorHandling(error: string | null): void {
         this.isError = true;
-
         let message: string;
-
         switch (error) {
             case 'EMAIL_EXISTS':
                 message = 'Email je već u upotrebi';
@@ -128,12 +114,10 @@ export class LoginComponent {
     async sendPRMwMAsync(email: string): Promise<void> {
         try {
             const url: string = environment.firebaseConfig.passResetURL + environment.firebaseConfig.apiKey;
-
             const requestBody = {
                 email: email,
                 requestType: 'PASSWORD_RESET'
             };
-
             const data = await lastValueFrom(this.http.post(url, requestBody));
             if (data !== null) {
                 this.mySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');

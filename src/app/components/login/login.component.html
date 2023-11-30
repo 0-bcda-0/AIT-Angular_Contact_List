@@ -3,7 +3,6 @@
         <mat-card-title class="title">Imenik</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        @if(!isLoading){
         <form class="flex flex-center" style="flex-direction: column;" #formGroup="ngForm" (ngSubmit)="onSubmit(formGroup)">
             <mat-form-field appearance="outline">
                 <mat-label>E-Mail</mat-label>
@@ -46,9 +45,6 @@
                     [disabled]="!formGroup.valid"    
             >{{ isLoginMode ? 'Prijavi se' : 'Registriraj se' }}</button>
         </form>
-    } @else {
-        <div class="flex flex-center"><mat-spinner></mat-spinner></div>
-    }
         <div class="flex flex-center"> 
             <a class="link" (click)="onSwitchMode()">{{ isLoginMode ? 'Registriraj' : 'Prijavi' }} se</a>
         </div>

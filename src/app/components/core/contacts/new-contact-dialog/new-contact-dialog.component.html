@@ -1,6 +1,8 @@
-<h2 mat-dialog-title>Unesi novi kontakt</h2>
+<h2 mat-dialog-title style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+    <mat-icon>perm_identity</mat-icon>
+    Unesi novi kontakt
+</h2>
 <mat-dialog-content class="dialogContent">
-    <!-- <mat-dialog-content> -->
     <mat-vertical-stepper>
         <mat-step label="Osobni podaci" [completed]="isViewOnly">
             <form [formGroup]="PIFormGroup">
@@ -98,7 +100,7 @@
     <button mat-button color="primary" (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
     @if(!isViewOnly || isEditMode){
         <button mat-raised-button color="primary" class="whiteThemeFix" (click)="onSubmitAsync()"
-        [disabled]="isViewOnly && !isEditMode || !PIFormGroup.value || !LIFormGroup.valid || !CIFormGroup.valid"
-        >Spremi kontakt</button>
+            [disabled]="(isViewOnly && (!PIFormGroup.dirty || !PIFormGroup.valid) && (!LIFormGroup.dirty || !LIFormGroup.valid) && (!CIFormGroup.dirty || !CIFormGroup.valid)) || (!isViewOnly && (!PIFormGroup.valid || !LIFormGroup.valid || !CIFormGroup.valid))"
+            >Spremi kontakt</button>
     }
 </mat-dialog-actions>

@@ -5,17 +5,20 @@ import {
     HttpHandler,
     HttpEvent,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { Router } from '@angular/router';
+import { LoaderService } from '../loader.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     router = inject(Router);
+    loaderService = inject(LoaderService);
 
     userIdToken: string | null = null;
     userExpirationDate: Date | null = null;
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        this.loaderService.showLoader();
         const user = localStorage.getItem('userData');
         const userObj = JSON.parse(user!);
         if (user) {
@@ -30,7 +33,10 @@ export class AuthInterceptor implements HttpInterceptor {
             const modifiedRequest = req.clone({
                 params: req.params.set('auth', this.userIdToken),
             });
-            return next.handle(modifiedRequest);
+            return next.handle(modifiedRequest).pipe(
+                (finalize(() => {
+                    this.loaderService.hideLoader();
+                })));
         }
         return next.handle(req);
     }
