@@ -6,7 +6,7 @@
     <app-theme-toggle style="margin-left: auto;"></app-theme-toggle>
 </mat-toolbar>
 
-<mat-sidenav-container [ngStyle]="{'height' : 'calc(100vh - 64px)'}">
+<mat-sidenav-container style="height: calc(100vh-64px);">
     <mat-sidenav mode="side" [opened]="isMenuOpen">
         <div
             style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; gap: 10px;">
@@ -25,7 +25,7 @@
             </a>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content style="height: calc(100vh - 64px);">
         <!-- CHILD ROUTER -->
         <router-outlet></router-outlet>
     </mat-sidenav-content>

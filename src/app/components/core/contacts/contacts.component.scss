@@ -4,7 +4,7 @@ mat-card {
     margin-top: 5%;
 }
 
-.card{
+.card {
     padding: 16px;
 }
 
@@ -31,7 +31,7 @@ th {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    padding: 0;
+    padding: 0 16px;
 }
 
 .header-rightFlex {
@@ -51,9 +51,52 @@ th {
     pointer-events: none;
 }
 
-.menu{
+.menu {
     display: none;
 }
+
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 370px;
+}
+
+// @mixin column {
+//     width: 11.11% !important;
+// }
+
+// .mat-column-id {
+//     @include column;
+// }
+
+// .mat-column-name {
+//     @include column;
+// }
+
+// .mat-column-surname {
+//     @include column;
+// }
+
+// .mat-column-dateOfBirth {
+//     @include column;
+// }
+
+// .mat-column-street {
+//     @include column;
+// }
+
+// .mat-column-postalCode {
+//     @include column;
+// }
+
+// .mat-column-phonePrefix {
+//     @include column;
+// }
+
+// .mat-column-phone {
+//     @include column;
+// }
 
 @media (max-width: 1024px) {
     .header-container {
@@ -63,11 +106,40 @@ th {
     .header-rightFlex {
         flex-direction: row;
     }
+
+    .actions {
+        display: none;
+    }
+
+    .menu {
+        display: block;
+    }
+
+    // POPRAVAK ZA PAGINATOR DA NEBUDE SCROOLABILAN
+    .paginator {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+    }
+
+    // POPRAVAK ZA STUPAC AKCIJE
+    .mat-column-actions {
+        position: absolute !important;
+        right: 16px !important;
+    }
+
+    th:last-child{
+        height: inherit;
+        line-height: 55px;
+    }
 }
+
+
 
 @media (max-width: 450px) {
     .card {
         width: 100%;
+        height: 100%;
         margin-top: 0;
         padding: 16px;
     }
@@ -91,11 +163,11 @@ th {
         padding: 0;
     }
 
-    .actions{
+    .actions {
         display: none;
     }
 
-    .menu{
+    .menu {
         display: block;
     }
 }

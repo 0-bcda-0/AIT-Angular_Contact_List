@@ -25,7 +25,6 @@ export class ThemeToggleComponent implements OnInit {
             this.isDarkMode = false;
             this.renderer.removeClass(document.body, 'alternative');
         }
-
     }
 
     toggleTheme(): void {

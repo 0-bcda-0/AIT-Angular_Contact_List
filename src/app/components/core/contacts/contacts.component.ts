@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
@@ -22,7 +22,7 @@ import { DateFormate } from 'src/app/shared/dateFormat.service';
 import { environment } from 'src/environments/environment.firebase';
 import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 import { NewContactDialogComponent } from './new-contact-dialog/new-contact-dialog.component';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
     selector: 'app-contacts',
@@ -44,7 +44,6 @@ import {MatMenuModule} from '@angular/material/menu';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        NgStyle,
         NgClass,
         MatMenuModule,
     ]
@@ -82,7 +81,7 @@ export class ContactsComponent implements OnInit {
             this.userIdToken = userObj.idToken;
             const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json`;
             const data: any = await lastValueFrom(this.http.get(dataBaseURL));
-            if (data !== null) {
+            if (data) {
                 //* Dohvacanje ID-a iz Firebase-a, spremanje u array
                 const contacts: IContact[] = Object.keys(data).map(id => ({ id, ...data[id] }));
                 //* Filtracija podataka po useruid-u
@@ -107,20 +106,20 @@ export class ContactsComponent implements OnInit {
     // Otvori dialog za dodavanje novog kontakta (NewContactDialogComponent) 
     async openNewContactDialog(data: IContact | null, edit?: boolean): Promise<void> {
         //* Ako je edit onda komponenta autokomplita unosna polja 
-        if(edit){data!.edit = edit;}
+        if (edit) { data!.edit = edit; }
 
         // Bilo to edit/view/new, saljemo podatke (ili null) u dialog 
         const dialog = this.dialog.open(NewContactDialogComponent, {
             data: data
         });
 
-        try{
+        try {
             const result = await lastValueFrom(dialog.afterClosed());
             // Nakon zatvaranja dialoga, dohvacamo nove podatke ako je editirano ili dodano
-            if(result){
+            if (result) {
                 await this.getDataAsync();
             }
-        } catch(error){
+        } catch (error) {
             this.mySnackbarService.openSnackBar('Došlo je do greške prilikom otvaranja dialoga', 'Zatvori', 'error');
         }
     }

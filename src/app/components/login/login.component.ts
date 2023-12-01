@@ -44,7 +44,7 @@ export class LoginComponent {
     emailForPasswordReset: string = '';
 
     async onSubmit(form: NgForm): Promise<void> {
-        if (!form.valid) {return;}
+        if (!form.valid) { return; }
         const email: string = form.value.email;
         const password: string = form.value.password;
         this.isLoading = true;
@@ -119,7 +119,7 @@ export class LoginComponent {
                 requestType: 'PASSWORD_RESET'
             };
             const data = await lastValueFrom(this.http.post(url, requestBody));
-            if (data !== null) {
+            if (data) {
                 this.mySnackbarService.openSnackBar('Zahtjev za promjenu lozinke uspješno poslan na ' + email + '.', 'Zatvori', 'success');
             }
         } catch {

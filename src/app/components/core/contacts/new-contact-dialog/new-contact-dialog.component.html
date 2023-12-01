@@ -97,7 +97,7 @@
     </mat-vertical-stepper>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button color="primary" (click)="openCloseDialogAsync()" [ngStyle]="{'margin-left' : 'auto'}">Zatvori</button>
+    <button mat-button color="primary" (click)="openCloseDialogAsync()" style="margin-left: auto;">Zatvori</button>
     @if(!isViewOnly || isEditMode){
         <button mat-raised-button color="primary" class="whiteThemeFix" (click)="onSubmitAsync()"
             [disabled]="(isViewOnly && (!PIFormGroup.dirty || !PIFormGroup.valid) && (!LIFormGroup.dirty || !LIFormGroup.valid) && (!CIFormGroup.dirty || !CIFormGroup.valid)) || (!isViewOnly && (!PIFormGroup.valid || !LIFormGroup.valid || !CIFormGroup.valid))"

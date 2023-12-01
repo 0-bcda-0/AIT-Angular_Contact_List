@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment.firebase';
 import { UserSettingsService } from './user-settings.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService  {
+export class AuthService {
     http = inject(HttpClient);
     userSettingsService = inject(UserSettingsService);
 

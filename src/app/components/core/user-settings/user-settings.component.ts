@@ -72,7 +72,7 @@ export class UserSettingsComponent implements OnInit {
       };
 
       const data = await lastValueFrom(this.http.post(url, requestBody));
-      if (data !== null) {
+      if (data) {
         this.mySnackbarService.openSnackBar('Zahtjev za promjenu lozinke poslan uspješno.', 'Zatvori', 'success');
       }
     } catch {

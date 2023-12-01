@@ -21,9 +21,7 @@ export class UserSettingsService {
 
   async getUSfromDatabaseAsync(user: IAuthResponseData): Promise<{ idDB: string; localId: string; name: string; surname: string; }> {
     let isFound: boolean = false;
-
     const URL: string = environment.firebaseConfig.databaseURL + '/users.json';
-
     const data = await lastValueFrom(this.http.get<{ [key: string]: IAuthResponseData }>(URL));
 
     let idDB: string = '';
@@ -31,7 +29,7 @@ export class UserSettingsService {
     let name: string = '';
     let surname: string = '';
 
-    if (data !== null) {
+    if (data) {
       const users = Object.keys(data).map((idDB) => ({ idDB, ...data[idDB], }));
       let searchId: string = user.localId;
       for (const Resuser of users) {
@@ -70,7 +68,7 @@ export class UserSettingsService {
 
   async updateUSinDatabaseAsync(user: IAuthResponseData, name: string, surname: string): Promise<void> {
     const userSettingsData: { idDB: string; localId: string; name: string; surname: string; } = await this.getUSfromDatabaseAsync(user);
-    
+
     const localId: string = user.localId;
     const idDB: string = userSettingsData.idDB;
     const dataToSave = { localId, name, surname };

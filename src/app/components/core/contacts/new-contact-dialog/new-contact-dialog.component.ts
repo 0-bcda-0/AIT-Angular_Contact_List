@@ -1,7 +1,6 @@
 import { Component, inject, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NgStyle } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +35,6 @@ import { MatIconModule } from '@angular/material/icon';
         MatSelectModule,
         MatOptionModule,
         MatButtonModule,
-        NgStyle,
         MatDialogModule,
         MatIconModule,
     ],
@@ -60,7 +58,7 @@ export class NewContactDialogComponent {
     maxDate: Date = new Date();
     userIdToken: string = '';
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    constructor(@Inject(MAT_DIALOG_DATA) public data: IContact) {
         this.PIFormGroup = this._formBuilder.group({
             name: [{ value: '', disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
             surname: [{ value: '', disabled: this.isViewOnly && !this.isEditMode }, Validators.required],
@@ -120,11 +118,11 @@ export class NewContactDialogComponent {
                 const dataSaved: IContact = Object.assign({}, { useruid }, formValues);
                 //* Kreiranje URL-a za spremanje podataka u bazu i spremanje podataka u bazu
                 const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts.json`;
-                try {
-                    const http = await lastValueFrom(this.http.post(dataBaseURL, dataSaved));
+                const http = await lastValueFrom(this.http.post(dataBaseURL, dataSaved));
+                if (http) {
                     this.mySnackbarService.openSnackBar('Uspješno spremanje kontakta.', 'Zatvori', 'success');
                     this.dialogRef.close(true);
-                } catch {
+                } else {
                     this.mySnackbarService.openSnackBar('Pogreška pri spremanju.', 'Zatvori', 'error');
                 }
             } else {
@@ -148,11 +146,11 @@ export class NewContactDialogComponent {
                 delete formValues.number;
                 //* kreiranje URL-a za spremanje podataka u bazu i azuriranje podataka
                 const dataBaseURL: string = `${environment.firebaseConfig.databaseURL}/contacts/${id}.json`;
-                try {
-                    const http = await lastValueFrom(this.http.put(dataBaseURL, formValues));
+                const http = await lastValueFrom(this.http.put(dataBaseURL, formValues));
+                if (http) {
                     this.mySnackbarService.openSnackBar('Uspješno uređivanje kontakta.', 'Zatvori', 'success');
                     this.dialogRef.close(true);
-                } catch {
+                } else {
                     this.mySnackbarService.openSnackBar('Pogreška pri uređivanju.', 'Zatvori', 'error');
                 }
             } else {
