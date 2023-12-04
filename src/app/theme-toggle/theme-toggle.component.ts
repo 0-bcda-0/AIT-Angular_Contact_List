@@ -1,15 +1,18 @@
 import { Component, OnInit, Renderer2, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
     selector: 'app-theme-toggle',
     templateUrl: './theme-toggle.component.html',
+    styleUrls: ['./theme-toggle.component.scss'],
     standalone: true,
     imports: [
         MatSlideToggleModule,
         FormsModule,
+        MatIconModule
     ],
 })
 export class ThemeToggleComponent implements OnInit {

@@ -7,7 +7,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container class="custom-sidenav-container">
-    <mat-sidenav mode="side" [opened]="isMenuOpen" style="border-radius: 20px; margin: 5px;">
+    <mat-sidenav mode="side" [opened]="isMenuOpen" style="border-radius: 20px; margin: 5px; width: 170px;">
         <div class="userSettings">
             <div>Korisnik,</div>
             <a routerLink="/core/user-settings" routerLinkActive="active" class="userSettingsLink">{{ currentUser?.name + ' ' + currentUser?.surname }}</a>

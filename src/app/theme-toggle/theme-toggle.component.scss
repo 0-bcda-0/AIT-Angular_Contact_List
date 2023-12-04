@@ -1,0 +1,19 @@
+label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+::ng-deep mat-slide-toggle label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+@media (max-width: 450px) {
+    .toggle {
+        display: none;
+    }
+}
