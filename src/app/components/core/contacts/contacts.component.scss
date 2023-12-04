@@ -2,9 +2,9 @@
 
 .card {
     width: 85%;
-    margin: 0 auto;
-    margin-top: 5%;
     overflow: hidden;
+    border-radius: 10px;
+    margin: 5% auto 10px auto;
 }
 
 .header-wrapper {
@@ -47,25 +47,23 @@
 }
 
 @mixin test($width) {
-    width: 100%;
+    width: $width;
     min-width: $width;
     max-width: $width;
 }
-
+.mat-column-id {
+    @include test(70px);
+}
 .mat-column-name {
-    @include test(100px);
+    @include test(120px);
 }
 
 .mat-column-surname {
-    @include test(100px);
+    @include test(150px);
 }
 
 .mat-column-dateOfBirth {
     @include test(150px);
-}
-
-.mat-column-street {
-    @include test(200px);
 }
 
 .mat-column-postalCode {
@@ -94,7 +92,7 @@
     }
 
     .mat-column-actions {
-        border-left: 2px dotted #595959 !important;
+        border-left: 1px solid #aaaaaa !important;
     }
 }
 
@@ -107,6 +105,7 @@
         width: 100%;
         margin-top: 0;
         padding: 16px;
+        border-radius: unset;
     }
 
     .header-wrapper {

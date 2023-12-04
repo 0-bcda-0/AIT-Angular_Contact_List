@@ -1,7 +1,7 @@
 .main-card{
     width: 85%;
-    margin: 0 auto;
-    margin-top: 5%;
+    border-radius: 10px;
+    margin: 5% auto 10px auto;
 }
 
 .main-card-container{
@@ -13,6 +13,7 @@
 
 .child-card{
     width: 40%;
+    border-radius: 10px;
 }
 
 mat-card-title{
@@ -33,7 +34,7 @@ mat-card-title{
     .main-card{
         width: 100%;
         margin: 0 auto;
-
+        border-radius: unset;
     }
     
     .main-card-container{

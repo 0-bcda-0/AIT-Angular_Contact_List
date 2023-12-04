@@ -110,7 +110,8 @@ export class ContactsComponent implements OnInit {
 
         // Bilo to edit/view/new, saljemo podatke (ili null) u dialog 
         const dialog = this.dialog.open(NewContactDialogComponent, {
-            data: data
+            data: data,
+            backdropClass: 'backdropBackground'
         });
 
         try {
@@ -133,6 +134,7 @@ export class ContactsComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '350px',
             data: { title: 'Brisanje forme', message: 'Jeste li sigurni da želite izbrisati kontakt?', action: 'Obriši' },
+            backdropClass: 'backdropBackground'
         });
 
         try {

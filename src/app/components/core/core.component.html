@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" >
+<mat-toolbar color="primary" style="display: flex; flex-wrap: wrap; overflow: hidden; gap: 2px;">
     <button mat-icon-button (click)="toggleMenu()" [ngClass]="isMenuOpen ? 'ml' : ''">
         <mat-icon>menu</mat-icon>
     </button>
@@ -7,7 +7,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container class="custom-sidenav-container">
-    <mat-sidenav mode="side" [opened]="isMenuOpen">
+    <mat-sidenav mode="side" [opened]="isMenuOpen" style="border-radius: 20px; margin: 5px;">
         <div class="userSettings">
             <div>Korisnik,</div>
             <a routerLink="/core/user-settings" routerLinkActive="active" class="userSettingsLink">{{ currentUser?.name + ' ' + currentUser?.surname }}</a>
