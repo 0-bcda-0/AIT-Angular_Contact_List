@@ -10,13 +10,14 @@ import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { LoaderService } from 'src/app/loader.service';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-core',
     templateUrl: './core.component.html',
     styleUrls: ['./core.component.scss'],
     standalone: true,
-    imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, RouterLinkActive, RouterOutlet, ThemeToggleComponent]
+    imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, RouterLinkActive, RouterOutlet, ThemeToggleComponent, NgClass]
 })
 export class CoreComponent implements OnInit {
     router = inject(Router);

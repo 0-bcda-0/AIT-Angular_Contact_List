@@ -6,7 +6,7 @@
                 <mat-icon>perm_contact_calendar</mat-icon>
                 Unesi kontakt
             </button>
-            <form [formGroup]="filterForm" class="search-bar">
+            <form [formGroup]="filterForm" style="height: 56px;">
                 <mat-form-field appearance="outline">
                     <mat-label>Pretražite kontakte</mat-label>
                     <input matInput type="text" formControlName="search" (input)="applyFilter()">
@@ -14,9 +14,9 @@
             </form>
         </div>
     </mat-card-header>
-    <mat-card-content class="table-container">
+    <mat-card-content  >
         <div class="table-wrapper">
-            <table mat-table [dataSource]="dataSource" matSort>
+            <table mat-table [dataSource]="dataSource" matSort >
                 <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sortiraj po imenu">
                         Rbr.
@@ -109,8 +109,8 @@
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
             </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                aria-label="Select page of periodic elements" class="paginator"></mat-paginator>
         </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements" class="paginator"></mat-paginator>
     </mat-card-content>
 </mat-card>

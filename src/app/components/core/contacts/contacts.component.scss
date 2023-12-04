@@ -1,11 +1,39 @@
-mat-card {
+@import "/src/themes.scss";
+
+.card {
     width: 85%;
     margin: 0 auto;
     margin-top: 5%;
+    overflow: hidden;
 }
 
-.card {
-    padding: 16px;
+.header-wrapper {
+    width: 100%;
+    overflow: auto;
+}
+
+.menu {
+    display: none;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.header-rightFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.table-wrapper{
+    width: 100%;
+    overflow: auto;
+    min-height: 370px;
 }
 
 .mat-mdc-row .mat-mdc-cell {
@@ -18,88 +46,46 @@ mat-card {
     border-color: currentColor;
 }
 
-.table-container {
-    overflow: auto;
+@mixin test($width) {
+    width: 100%;
+    min-width: $width;
+    max-width: $width;
 }
 
-th {
-    user-select: none;
+.mat-column-name {
+    @include test(100px);
 }
 
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 0 16px;
+.mat-column-surname {
+    @include test(100px);
 }
 
-.header-rightFlex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
+.mat-column-dateOfBirth {
+    @include test(150px);
 }
 
-// Angular Material dodaje column te se pojavljuje nepoznat element ispod
-.mat-mdc-form-field {
-    flex-direction: row;
+.mat-column-street {
+    @include test(200px);
 }
 
-.dim {
-    background-color: rgba($color: #000000, $alpha: 0.2);
-    pointer-events: none;
+.mat-column-postalCode {
+    @include test(100px);
 }
 
-.menu {
-    display: none;
+.mat-column-phonePrefix {
+    @include test(100px);
 }
 
-.table-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 370px;
+.mat-column-phoneNumber {
+    @include test(100px);
 }
 
-// @mixin column {
-//     width: 11.11% !important;
-// }
-
-// .mat-column-id {
-//     @include column;
-// }
-
-// .mat-column-name {
-//     @include column;
-// }
-
-// .mat-column-surname {
-//     @include column;
-// }
-
-// .mat-column-dateOfBirth {
-//     @include column;
-// }
-
-// .mat-column-street {
-//     @include column;
-// }
-
-// .mat-column-postalCode {
-//     @include column;
-// }
-
-// .mat-column-phonePrefix {
-//     @include column;
-// }
-
-// .mat-column-phone {
-//     @include column;
-// }
+.mat-column-actions {
+    @include test(200px);
+}
 
 @media (max-width: 1024px) {
-    .header-container {
+    .header-wrapper {
         flex-direction: row;
     }
 
@@ -107,41 +93,28 @@ th {
         flex-direction: row;
     }
 
-    .actions {
-        display: none;
-    }
-
-    .menu {
-        display: block;
-    }
-
-    // POPRAVAK ZA PAGINATOR DA NEBUDE SCROOLABILAN
-    .paginator {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-    }
-
-    // POPRAVAK ZA STUPAC AKCIJE
     .mat-column-actions {
-        position: absolute !important;
-        right: 16px !important;
-    }
-
-    th:last-child{
-        height: inherit;
-        line-height: 55px;
+        border-left: 2px dotted #595959 !important;
     }
 }
 
-
-
 @media (max-width: 450px) {
+    .mat-column-actions {
+        @include test(100px);
+    }
+
     .card {
         width: 100%;
-        height: 100%;
         margin-top: 0;
         padding: 16px;
+    }
+
+    .header-wrapper {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: 0;
+        padding: 0;
     }
 
     .header-container {
@@ -150,6 +123,12 @@ th {
         align-items: flex-start;
         margin: 0;
         padding: 0;
+    }
+
+    .header-rightFlex {
+        margin-top: 20px;
+        flex-direction: column-reverse;
+        align-items: flex-start;
     }
 
     .header-rightFlex {
@@ -170,4 +149,25 @@ th {
     .menu {
         display: block;
     }
+
+    .mat-mdc-card-content {
+        padding: 0;
+    }
+}
+
+// Scrollbar
+/* Firefox */
+* {
+    scrollbar-width: 5px;
+    scrollbar-color: map-get($cyan-pallet, 500);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: map-get($cyan-pallet, 500);
+    border-radius: 20px;
 }

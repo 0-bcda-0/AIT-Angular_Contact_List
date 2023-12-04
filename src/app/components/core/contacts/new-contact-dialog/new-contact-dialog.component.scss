@@ -1,5 +1,3 @@
-@import "/src/themes.scss";
-
 .flexc {
     display: flex;
     flex-direction: column;
@@ -25,8 +23,7 @@
 }
 
 .dialogContent {
-    width: 900px;
-    min-height: 560px;
+    overflow: hidden;;
 }
 
 .input-container {
@@ -37,9 +34,9 @@
 .input-wrapper {
     display: flex;
     flex-direction: row;
-    // justify-content: start;
     gap: 20px;
     width: 100%;
+    flex-wrap: wrap;
 }
 
 @media (max-width: 450px) {
@@ -54,22 +51,6 @@
     .input-wrapper {
         flex-direction: column;
         gap: 10px;
+        flex-wrap: nowrap;
     }
-}
-
-// Scrollbar
-/* Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: map-get($cyan-pallet, 500);
-}
-
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 12px;
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: map-get($cyan-pallet, 500);
-    border-radius: 20px;
 }

@@ -1,15 +1,14 @@
-<mat-toolbar color="primary">
-    <button mat-icon-button (click)="toggleMenu()">
+<mat-toolbar color="primary" >
+    <button mat-icon-button (click)="toggleMenu()" [ngClass]="isMenuOpen ? 'ml' : ''">
         <mat-icon>menu</mat-icon>
     </button>
     <span>Angular Imenik</span>
     <app-theme-toggle style="margin-left: auto;"></app-theme-toggle>
 </mat-toolbar>
 
-<mat-sidenav-container style="height: calc(100vh-64px);">
+<mat-sidenav-container class="custom-sidenav-container">
     <mat-sidenav mode="side" [opened]="isMenuOpen">
-        <div
-            style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; gap: 10px;">
+        <div class="userSettings">
             <div>Korisnik,</div>
             <a routerLink="/core/user-settings" routerLinkActive="active" class="userSettingsLink">{{ currentUser?.name + ' ' + currentUser?.surname }}</a>
         </div>
@@ -25,7 +24,7 @@
             </a>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content style="height: calc(100vh - 64px);">
+    <mat-sidenav-content>
         <!-- CHILD ROUTER -->
         <router-outlet></router-outlet>
     </mat-sidenav-content>

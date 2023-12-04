@@ -1,5 +1,15 @@
 @import "/src/themes.scss";
 
+.custom-sidenav-container { 
+    position: inherit;
+    display: inherit;
+    transform: inherit; 
+}
+
+.ml{
+    margin-left: 100px;
+}
+
 .nav-list {
     display: flex;
     flex-direction: column;
@@ -32,11 +42,19 @@
     height: 20px;
 }
 
+.userSettings{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+
 .userSettingsLink {
     font-weight: 500;
     text-decoration: none;
     color: inherit;
-    // Mozda janky i mozda se ne smije medutim stavljeno iz razloga sto pri hoveru i activu ostatak komponenti se pomice gore dolje jer se tek tada pojavljuje border
     border-bottom: 1px solid transparent;
 
     &:hover {
