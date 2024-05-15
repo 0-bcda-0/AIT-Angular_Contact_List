@@ -1,3 +1,5 @@
+<img width="959" alt="Angular contact list application screenshot" src="https://github.com/0-bcda-0/AIT-Angular_Contact_List/assets/57132818/9d9f9509-b7ea-4ee6-8877-fcb0bb00feda">
+
 # Angular contact list application
 
 Simple CRUD application using Angular Material and Firebase.
