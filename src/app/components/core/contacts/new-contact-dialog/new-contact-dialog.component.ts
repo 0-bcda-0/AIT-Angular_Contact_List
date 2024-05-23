@@ -1,6 +1,6 @@
 import { Component, inject, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,17 +18,13 @@ import { environment } from 'src/environments/environment.firebase';
 import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 import { MatIconModule } from '@angular/material/icon';
 
-@Component({
-    selector: 'app-new-contact-dialog',
+@Component({ selector: 'app-new-contact-dialog',
     templateUrl: './new-contact-dialog.component.html',
     styleUrls: ['./new-contact-dialog.component.scss'],
-    standalone: true,
-    imports: [
-        MatDialogModule,
+    standalone: true, imports: [MatDialogModule,
         MatStepperModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule,
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule,
@@ -37,8 +33,7 @@ import { MatIconModule } from '@angular/material/icon';
         MatButtonModule,
         MatDialogModule,
         MatIconModule,
-    ],
-})
+        HttpClientModule]})
 export class NewContactDialogComponent {
     _formBuilder = inject(FormBuilder);
     http = inject(HttpClient);

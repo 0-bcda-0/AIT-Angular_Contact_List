@@ -24,13 +24,10 @@ import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 import { NewContactDialogComponent } from './new-contact-dialog/new-contact-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
 
-@Component({
-    selector: 'app-contacts',
+@Component({ selector: 'app-contacts',
     templateUrl: './contacts.component.html',
     styleUrls: ['./contacts.component.scss'],
-    standalone: true,
-    imports: [
-        MatCardModule,
+    standalone: true, imports: [MatCardModule,
         MatTableModule,
         MatButtonModule,
         MatIconModule,
@@ -43,11 +40,10 @@ import { MatMenuModule } from '@angular/material/menu';
         MatProgressSpinnerModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule,
         NgClass,
         MatMenuModule,
-    ]
-})
+        HttpClientModule
+    ]})
 export class ContactsComponent implements OnInit {
     http = inject(HttpClient);
     formBuilder = inject(FormBuilder);
