@@ -13,21 +13,16 @@ import { IAuthResponseData } from '../../models/IAuthResponseData.interface';
 import { mySnackbarService } from 'src/app/services/my-snackbar.service';
 import { environment } from 'src/environments/environment.firebase';
 
-@Component({
-    selector: 'app-login',
+@Component({ selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    standalone: true,
-    imports: [
-        MatCardModule,
+    standalone: true, imports: [MatCardModule,
         FormsModule,
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
-        HttpClientModule,
         MatProgressSpinnerModule,
-    ]
-})
+        HttpClientModule]})
 export class LoginComponent {
     router = inject(Router);
     authService = inject(AuthService);
